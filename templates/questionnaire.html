@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainability Questionnaire - FastAPI App</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="questionnaire-page">
+    <div class="header">
+        <h1>🌱 Sustainability Questionnaire</h1>
+        <div class="welcome">
+            Welcome, <strong>{{ user_name }}</strong>! Please complete the sustainability assessment below.
+            <br><small>This questionnaire contains {{ total_questions }} questions across multiple sustainability dimensions.</small>
+        </div>
+    </div>
+    
+    <div class="questionnaire-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        
+        <form method="POST" action="/submit-questionnaire" id="questionnaire-form">
+            {% for question in questions %}
+            <div class="question">
+                <h3>{{ loop.index }}. {{ question.question }}</h3>
+                <div class="question-meta">
+                    <span class="dimension">Dimension: {{ question.dimension }}</span>
+                    <span class="element">Element: {{ question.element }}</span>
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="{{ question.questionId }}-1" name="{{ question.questionId }}" value="1" required>
+                        <label for="{{ question.questionId }}-1">1 - Resist - Minimal or no sustainability practices, reactive approach</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="{{ question.questionId }}-2" name="{{ question.questionId }}" value="2">
+                        <label for="{{ question.questionId }}-2">2 - Comply - Basic regulatory compliance, limited proactive measures</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="{{ question.questionId }}-3" name="{{ question.questionId }}" value="3">
+                        <label for="{{ question.questionId }}-3">3 - Optimize - Proactive sustainability improvements, some integration into business</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="{{ question.questionId }}-4" name="{{ question.questionId }}" value="4">
+                        <label for="{{ question.questionId }}-4">4 - Reinvent - Sustainability as core business driver, comprehensive approach</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="{{ question.questionId }}-5" name="{{ question.questionId }}" value="5">
+                        <label for="{{ question.questionId }}-5">5 - Lead - Industry leadership in sustainability, market shaping activities</label>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="submit">Submit Questionnaire</button>
+                <a href="/logout"><button type="button" class="logout-btn">Logout</button></a>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Progress bar functionality
+        const form = document.getElementById('questionnaire-form');
+        const progressBar = document.getElementById('progress');
+        const totalQuestions = {{ total_questions }};
+        
+        function updateProgress() {
+            const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            progressBar.style.width = progress + '%';
+        }
+        
+        // Update progress when radio buttons change
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') {
+                updateProgress();
+            }
+        });
+        
+        // Form validation
+        form.addEventListener('submit', function(e) {
+            const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+            if (answeredQuestions < totalQuestions) {
+                e.preventDefault();
+                alert('Please answer all questions before submitting.');
+            }
+        });
+    </script>
+</body>
+</html> 

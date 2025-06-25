@@ -1,0 +1,41 @@
+{
+    "questionnaireReference": [
+        {
+            "questionId": "Q01",
+            "dimension": "Sustainability Leadership",
+            "element": "Leadership",
+            "question": "Sustainability is a priority for my Leadership committee"
+        },
+        {
+            "questionId": "Q02",
+            "dimension": "Sustainability Leadership",
+            "element": "Strategy",
+            "question": "Our organization has a strategy on Sustainability"
+        },
+        {
+            "questionId": "Q03",
+            "dimension": "Sustainability Leadership",
+            "element": "Accountability & Culture",
+            "question": "Leadership our accountability on Sustainability"
+        },
+        {
+            "questionId": "Q04",
+            "dimension": "Organization",
+            "element": "Structure",
+            "question": "We have an organization chart on Sustainability"
+        },
+        {
+            "questionId": "Q05",
+            "dimension": "Organization",
+            "element": "Governance",
+            "question": "We have policies on Sustainability in our organization"
+        }
+    ],
+    "responses": {
+        "1": "Resist - Minimal or no sustainability practices, reactive approach",
+        "2": "Comply - Basic regulatory compliance, limited proactive measures",
+        "3": "Optimize - Proactive sustainability improvements, some integration into business",
+        "4": "Reinvent - Sustainability as core business driver, comprehensive approach",
+        "5": "Lead - Industry leadership in sustainability, market shaping activities"
+    }
+}

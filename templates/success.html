@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - FastAPI App</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        .langflow-result {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .langflow-result h3 {
+            margin: 0 0 1rem 0;
+            color: #4CAF50;
+        }
+        .langflow-result pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .error-message {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        .success-message {
+            color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+    </style>
+</head>
+<body class="success-page">
+    <div class="success-container">
+        <h1>✅ Success!</h1>
+        <p>Thank you, <strong>{{ user_name }}</strong>! Your sustainability questionnaire has been submitted successfully.</p>
+        <p><small>You completed {{ total_questions }} questions across multiple sustainability dimensions.</small></p>
+        
+        {% if langflow_result %}
+            <div class="langflow-result">
+                <h3>🤖 AI Analysis Results</h3>
+                {% if langflow_result.success %}
+                    <div class="success-message">
+                        ✅ Langflow API call successful (Status: {{ langflow_result.status_code }})
+                    </div>
+                    <pre>{{ langflow_result.response }}</pre>
+                {% else %}
+                    <div class="error-message">
+                        ❌ Langflow API call failed
+                        <br><small>Error: {{ langflow_result.error }}</small>
+                        {% if langflow_result.status_code %}
+                            <br><small>Status Code: {{ langflow_result.status_code }}</small>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <p><small>Note: Langflow analysis not available. Make sure Langflow is running on localhost:7860.</small></p>
+        {% endif %}
+        
+        <div class="buttons">
+            <a href="/questionnaire">📋 Take Another Survey</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
+    </div>
+</body>
+</html> 
