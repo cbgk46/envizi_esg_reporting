@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+jinja2
+langflow
+requests
+markdown
+playwright
+openai
+python-dotenv
+matplotlib
+plotly
+kaleido
