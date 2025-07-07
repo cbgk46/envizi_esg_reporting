@@ -1,0 +1,652 @@
+{
+  "metadata": {
+    "title": "Sustainability Maturity Assessment Benchmark",
+    "description": "Comprehensive benchmark for assessing organizational sustainability maturity across 10 dimensions",
+    "version": "1.0",
+    "basedOn": "APAC Manufacturing Companies Survey (50 companies)",
+    "industryFocus": "Manufacturing",
+    "geography": "APAC",
+    "totalDimensions": 10,
+    "totalElements": 29,
+    "totalQuestions": 29,
+    "maturityLevels": 5,
+    "generatedDate": "2025-06-13",
+    "scoringMethod": "Likert Scale (1-5)",
+    "benchmarkStats": {
+      "sampleSize": 50,
+      "revenueRange": "$50M-$500M",
+      "employeeRange": "7,300-111,500",
+      "yearsInBusinessRange": "8-45",
+      "publicPrivateMix": "60% Private, 40% Public"
+    }
+  },
+  "maturityLevels": {
+    "1": {
+      "name": "Resist",
+      "description": "Minimal sustainability awareness, reactive approach driven by compliance only"
+    },
+    "2": {
+      "name": "Comply",
+      "description": "Basic compliance with regulations, sustainability seen as risk management"
+    },
+    "3": {
+      "name": "Optimize",
+      "description": "Proactive sustainability integration, focus on operational improvements"
+    },
+    "4": {
+      "name": "Reinvent",
+      "description": "Sustainability embedded in strategy, driving innovation and value creation"
+    },
+    "5": {
+      "name": "Lead",
+      "description": "Industry leadership, shaping market standards and cross-industry collaboration"
+    }
+  },
+  "dimensions": [
+    {
+      "id": 1,
+      "name": "Sustainability Leadership",
+      "description": "Leadership commitment, strategy development, and cultural integration",
+      "weight": 0.12,
+      "elements": [
+        {
+          "id": "1.1",
+          "name": "Leadership",
+          "question": "Sustainability is a priority for my Leadership committee",
+          "benchmarkScore": 2.8,
+          "industryAverage": 2.6,
+          "topQuartile": 4.0,
+          "distribution": {
+            "level1": 15,
+            "level2": 30,
+            "level3": 35,
+            "level4": 15,
+            "level5": 5
+          }
+        },
+        {
+          "id": "1.2",
+          "name": "Strategy",
+          "question": "Our organization has a strategy on Sustainability",
+          "benchmarkScore": 2.6,
+          "industryAverage": 2.4,
+          "topQuartile": 3.8,
+          "distribution": {
+            "level1": 20,
+            "level2": 35,
+            "level3": 30,
+            "level4": 12,
+            "level5": 3
+          }
+        },
+        {
+          "id": "1.3",
+          "name": "Accountability & Culture",
+          "question": "Leadership our accountability on Sustainability",
+          "benchmarkScore": 2.4,
+          "industryAverage": 2.2,
+          "topQuartile": 3.5,
+          "distribution": {
+            "level1": 25,
+            "level2": 40,
+            "level3": 25,
+            "level4": 8,
+            "level5": 2
+          }
+        }
+      ],
+      "overallScore": 2.6
+    },
+    {
+      "id": 2,
+      "name": "Organization",
+      "description": "Organizational structure and governance for sustainability",
+      "weight": 0.10,
+      "elements": [
+        {
+          "id": "2.1",
+          "name": "Structure",
+          "question": "We have an organization chart on Sustainability",
+          "benchmarkScore": 2.2,
+          "industryAverage": 2.0,
+          "topQuartile": 3.2,
+          "distribution": {
+            "level1": 35,
+            "level2": 35,
+            "level3": 20,
+            "level4": 8,
+            "level5": 2
+          }
+        },
+        {
+          "id": "2.2",
+          "name": "Governance",
+          "question": "We have policies on Sustainability in our organization",
+          "benchmarkScore": 2.8,
+          "industryAverage": 2.6,
+          "topQuartile": 3.8,
+          "distribution": {
+            "level1": 18,
+            "level2": 32,
+            "level3": 32,
+            "level4": 15,
+            "level5": 3
+          }
+        }
+      ],
+      "overallScore": 2.5
+    },
+    {
+      "id": 3,
+      "name": "Sustainability Risk Management",
+      "description": "Risk framework, performance management, and compliance processes",
+      "weight": 0.11,
+      "elements": [
+        {
+          "id": "3.1",
+          "name": "Risk Framework",
+          "question": "Our organization has a Sustainability Risk Framework",
+          "benchmarkScore": 2.1,
+          "industryAverage": 1.9,
+          "topQuartile": 3.0,
+          "distribution": {
+            "level1": 40,
+            "level2": 30,
+            "level3": 20,
+            "level4": 8,
+            "level5": 2
+          }
+        },
+        {
+          "id": "3.2",
+          "name": "Performance Management",
+          "question": "We produce an audited sustainability report which captures our carbon emission, water usage, waste pollution, energy efficiency",
+          "benchmarkScore": 2.3,
+          "industryAverage": 2.1,
+          "topQuartile": 3.3,
+          "distribution": {
+            "level1": 32,
+            "level2": 35,
+            "level3": 22,
+            "level4": 9,
+            "level5": 2
+          }
+        },
+        {
+          "id": "3.3",
+          "name": "Compliance Processes",
+          "question": "We have a compliance process in our organization",
+          "benchmarkScore": 3.1,
+          "industryAverage": 2.9,
+          "topQuartile": 4.2,
+          "distribution": {
+            "level1": 12,
+            "level2": 25,
+            "level3": 40,
+            "level4": 18,
+            "level5": 5
+          }
+        }
+      ],
+      "overallScore": 2.5
+    },
+    {
+      "id": 4,
+      "name": "Data & Systems",
+      "description": "Data collection, insights generation, and technology application",
+      "weight": 0.10,
+      "elements": [
+        {
+          "id": "4.1",
+          "name": "Access to data",
+          "question": "We collect Sustainability information such as Power usage, waste generated, water usage",
+          "benchmarkScore": 2.7,
+          "industryAverage": 2.5,
+          "topQuartile": 3.7,
+          "distribution": {
+            "level1": 20,
+            "level2": 30,
+            "level3": 35,
+            "level4": 12,
+            "level5": 3
+          }
+        },
+        {
+          "id": "4.2",
+          "name": "Actionable Insights",
+          "question": "We use our Sustainability Data to design new products or new processes",
+          "benchmarkScore": 2.0,
+          "industryAverage": 1.8,
+          "topQuartile": 2.8,
+          "distribution": {
+            "level1": 45,
+            "level2": 30,
+            "level3": 18,
+            "level4": 5,
+            "level5": 2
+          }
+        },
+        {
+          "id": "4.3",
+          "name": "Technology Application",
+          "question": "We use software applications like excel to track our organization's Sustainability measurements",
+          "benchmarkScore": 2.4,
+          "industryAverage": 2.2,
+          "topQuartile": 3.4,
+          "distribution": {
+            "level1": 28,
+            "level2": 38,
+            "level3": 24,
+            "level4": 8,
+            "level5": 2
+          }
+        }
+      ],
+      "overallScore": 2.4
+    },
+    {
+      "id": 5,
+      "name": "People & Competency",
+      "description": "Skills development and training programs",
+      "weight": 0.09,
+      "elements": [
+        {
+          "id": "5.1",
+          "name": "Skills Requirement",
+          "question": "We are aware of Singapore Green Plan 2030 Key Targets",
+          "benchmarkScore": 2.2,
+          "industryAverage": 2.0,
+          "topQuartile": 3.2,
+          "distribution": {
+            "level1": 38,
+            "level2": 32,
+            "level3": 22,
+            "level4": 6,
+            "level5": 2
+          }
+        },
+        {
+          "id": "5.2",
+          "name": "Training & Development",
+          "question": "Our Workforce has been given training in Sustainability practices like decarbonisation, circular economy, sustainability reporting, carbon management and waste management",
+          "benchmarkScore": 1.9,
+          "industryAverage": 1.7,
+          "topQuartile": 2.7,
+          "distribution": {
+            "level1": 48,
+            "level2": 30,
+            "level3": 15,
+            "level4": 5,
+            "level5": 2
+          }
+        }
+      ],
+      "overallScore": 2.1
+    },
+    {
+      "id": 6,
+      "name": "Direct Asset Management",
+      "description": "Asset planning, creation, and management with sustainability focus",
+      "weight": 0.10,
+      "elements": [
+        {
+          "id": "6.1",
+          "name": "Asset Planning",
+          "question": "Our Organization owned non-movable assets are purchased or designed with sustainability in mind",
+          "benchmarkScore": 2.3,
+          "industryAverage": 2.1,
+          "topQuartile": 3.3,
+          "distribution": {
+            "level1": 32,
+            "level2": 35,
+            "level3": 24,
+            "level4": 7,
+            "level5": 2
+          }
+        },
+        {
+          "id": "6.2",
+          "name": "Asset Creation",
+          "question": "Our organization has a digital strategy to do our business and we are a paperless organization",
+          "benchmarkScore": 2.6,
+          "industryAverage": 2.4,
+          "topQuartile": 3.6,
+          "distribution": {
+            "level1": 22,
+            "level2": 35,
+            "level3": 30,
+            "level4": 10,
+            "level5": 3
+          }
+        },
+        {
+          "id": "6.3",
+          "name": "Asset Management",
+          "question": "We measure carbon footprint of our organization owned assets",
+          "benchmarkScore": 2.1,
+          "industryAverage": 1.9,
+          "topQuartile": 3.0,
+          "distribution": {
+            "level1": 40,
+            "level2": 32,
+            "level3": 20,
+            "level4": 6,
+            "level5": 2
+          }
+        }
+      ],
+      "overallScore": 2.3
+    },
+    {
+      "id": 7,
+      "name": "Product Management",
+      "description": "Sustainable product design, manufacturing, marketing, and circularity",
+      "weight": 0.12,
+      "elements": [
+        {
+          "id": "7.1",
+          "name": "Design",
+          "question": "Our organization designs products and services which are sustainable",
+          "benchmarkScore": 2.4,
+          "industryAverage": 2.2,
+          "topQuartile": 3.4,
+          "distribution": {
+            "level1": 28,
+            "level2": 38,
+            "level3": 24,
+            "level4": 8,
+            "level5": 2
+          }
+        },
+        {
+          "id": "7.2",
+          "name": "Manufacture",
+          "question": "We build our products keeping sustainability criteria",
+          "benchmarkScore": 2.5,
+          "industryAverage": 2.3,
+          "topQuartile": 3.5,
+          "distribution": {
+            "level1": 25,
+            "level2": 35,
+            "level3": 28,
+            "level4": 10,
+            "level5": 2
+          }
+        },
+        {
+          "id": "7.3",
+          "name": "Sales & marketing",
+          "question": "Our marketing team highlight Sustainability features of our product",
+          "benchmarkScore": 2.1,
+          "industryAverage": 1.9,
+          "topQuartile": 3.0,
+          "distribution": {
+            "level1": 40,
+            "level2": 32,
+            "level3": 20,
+            "level4": 6,
+            "level5": 2
+          }
+        },
+        {
+          "id": "7.4",
+          "name": "Circularity",
+          "question": "We practice circular economy for our products",
+          "benchmarkScore": 1.8,
+          "industryAverage": 1.6,
+          "topQuartile": 2.6,
+          "distribution": {
+            "level1": 52,
+            "level2": 28,
+            "level3": 15,
+            "level4": 4,
+            "level5": 1
+          }
+        }
+      ],
+      "overallScore": 2.2
+    },
+    {
+      "id": 8,
+      "name": "Vendor Management",
+      "description": "Supplier evaluation, raw materials sourcing, and accreditation",
+      "weight": 0.10,
+      "elements": [
+        {
+          "id": "8.1",
+          "name": "Supplier Base",
+          "question": "We collect audited Sustainability reports from our suppliers",
+          "benchmarkScore": 1.9,
+          "industryAverage": 1.7,
+          "topQuartile": 2.7,
+          "distribution": {
+            "level1": 48,
+            "level2": 30,
+            "level3": 16,
+            "level4": 5,
+            "level5": 1
+          }
+        },
+        {
+          "id": "8.2",
+          "name": "Raw Materials",
+          "question": "We source raw materials based on their sustainability characteristics and traceability",
+          "benchmarkScore": 2.0,
+          "industryAverage": 1.8,
+          "topQuartile": 2.8,
+          "distribution": {
+            "level1": 45,
+            "level2": 30,
+            "level3": 18,
+            "level4": 5,
+            "level5": 2
+          }
+        },
+        {
+          "id": "8.3",
+          "name": "Supplier Accreditation",
+          "question": "We ensure our Supplier organization has the relevant sustainability accreditation like environmental management system (ISO 14001)",
+          "benchmarkScore": 2.2,
+          "industryAverage": 2.0,
+          "topQuartile": 3.1,
+          "distribution": {
+            "level1": 35,
+            "level2": 35,
+            "level3": 22,
+            "level4": 6,
+            "level5": 2
+          }
+        }
+      ],
+      "overallScore": 2.0
+    },
+    {
+      "id": 9,
+      "name": "Metrics & Reporting",
+      "description": "Risk management, ESG reporting, and regulatory understanding",
+      "weight": 0.08,
+      "elements": [
+        {
+          "id": "9.1",
+          "name": "Risk Management",
+          "question": "We are aware of the penalties by National Environment Agency for unsustainable practices like Green House Gas emissions",
+          "benchmarkScore": 2.9,
+          "industryAverage": 2.7,
+          "topQuartile": 3.9,
+          "distribution": {
+            "level1": 15,
+            "level2": 30,
+            "level3": 35,
+            "level4": 16,
+            "level5": 4
+          }
+        },
+        {
+          "id": "9.2",
+          "name": "ESG Management",
+          "question": "We produce an ESG Report",
+          "benchmarkScore": 2.0,
+          "industryAverage": 1.8,
+          "topQuartile": 2.8,
+          "distribution": {
+            "level1": 45,
+            "level2": 30,
+            "level3": 18,
+            "level4": 5,
+            "level5": 2
+          }
+        },
+        {
+          "id": "9.3",
+          "name": "Regulatory Management/ Understanding",
+          "question": "We work with key stakeholders such as industry, regulations, customers etc to shape the regulations in our industry",
+          "benchmarkScore": 1.7,
+          "industryAverage": 1.5,
+          "topQuartile": 2.4,
+          "distribution": {
+            "level1": 58,
+            "level2": 25,
+            "level3": 12,
+            "level4": 4,
+            "level5": 1
+          }
+        }
+      ],
+      "overallScore": 2.2
+    },
+    {
+      "id": 10,
+      "name": "Managing Change",
+      "description": "Market activation, new business models, and responsive operations",
+      "weight": 0.08,
+      "elements": [
+        {
+          "id": "10.1",
+          "name": "Market Activation",
+          "question": "We work with Partners and our competition to drive cross Industry Sustainability change",
+          "benchmarkScore": 1.6,
+          "industryAverage": 1.4,
+          "topQuartile": 2.2,
+          "distribution": {
+            "level1": 62,
+            "level2": 23,
+            "level3": 12,
+            "level4": 2,
+            "level5": 1
+          }
+        },
+        {
+          "id": "10.2",
+          "name": "New Business Models",
+          "question": "We have built our own sustainable operating model like a checklist list to ensure sustainable practices",
+          "benchmarkScore": 2.1,
+          "industryAverage": 1.9,
+          "topQuartile": 3.0,
+          "distribution": {
+            "level1": 40,
+            "level2": 32,
+            "level3": 20,
+            "level4": 6,
+            "level5": 2
+          }
+        },
+        {
+          "id": "10.3",
+          "name": "Responsive Operations",
+          "question": "We have Sustainability KPIs",
+          "benchmarkScore": 2.3,
+          "industryAverage": 2.1,
+          "topQuartile": 3.2,
+          "distribution": {
+            "level1": 32,
+            "level2": 35,
+            "level3": 24,
+            "level4": 7,
+            "level5": 2
+          }
+        }
+      ],
+      "overallScore": 2.0
+    }
+  ],
+  "overallBenchmark": {
+    "weightedAverageScore": 2.3,
+    "industryAverage": 2.1,
+    "topQuartileThreshold": 3.2,
+    "standardDeviation": 0.8,
+    "distributionByLevel": {
+      "level1": 36,
+      "level2": 32,
+      "level3": 22,
+      "level4": 8,
+      "level5": 2
+    }
+  },
+  "industryInsights": {
+    "strongestDimensions": [
+      {
+        "dimension": "Metrics & Reporting - Risk Management",
+        "score": 2.9,
+        "insight": "Most companies are aware of regulatory penalties"
+      },
+      {
+        "dimension": "Sustainability Leadership",
+        "score": 2.6,
+        "insight": "Leadership commitment is emerging but inconsistent"
+      },
+      {
+        "dimension": "Data & Systems - Access to data",
+        "score": 2.7,
+        "insight": "Basic data collection infrastructure in place"
+      }
+    ],
+    "weakestDimensions": [
+      {
+        "dimension": "Managing Change - Market Activation",
+        "score": 1.6,
+        "insight": "Limited cross-industry collaboration"
+      },
+      {
+        "dimension": "Product Management - Circularity",
+        "score": 1.8,
+        "insight": "Circular economy practices are nascent"
+      },
+      {
+        "dimension": "People & Competency - Training",
+        "score": 1.9,
+        "insight": "Significant skills gap in sustainability"
+      }
+    ]
+  },
+  "recommendedFocusAreas": [
+    "Develop comprehensive sustainability training programs",
+    "Implement circular economy principles in product design",
+    "Establish cross-industry partnerships for sustainability",
+    "Create actionable insights from sustainability data",
+    "Build supplier sustainability assessment programs"
+  ],
+  "spiderChartConfiguration": {
+    "dimensions": [
+      "Sustainability Leadership",
+      "Organization", 
+      "Risk Management",
+      "Data & Systems",
+      "People & Competency",
+      "Asset Management",
+      "Product Management",
+      "Vendor Management",
+      "Metrics & Reporting",
+      "Managing Change"
+    ],
+    "maxScore": 5,
+    "benchmarkLine": 2.3,
+    "industryAverageLine": 2.1,
+    "topQuartileLine": 3.2,
+    "colorScheme": {
+      "userScore": "#2563eb",
+      "benchmark": "#dc2626",
+      "industryAverage": "#16a34a",
+      "topQuartile": "#ea580c"
+    }
+  }
+}
