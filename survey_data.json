@@ -1,0 +1,332 @@
+{
+  "metadata": {
+    "title": "Sustainability Survey Data",
+    "description": "Survey scores across 10 sustainability categories for various companies",
+    "total_companies": 21,
+    "total_categories": 10
+  },
+  "industry_averages": [
+    {
+      "id": 1,
+      "name": "Sustainability Leadership",
+      "industry_average": 1.86
+    },
+    {
+      "id": 2,
+      "name": "Organization",
+      "industry_average": 1.45
+    },
+    {
+      "id": 3,
+      "name": "Sustainability Risk Mgmt",
+      "industry_average": 1.27
+    },
+    {
+      "id": 4,
+      "name": "Data & Systems",
+      "industry_average": 2.60
+    },
+    {
+      "id": 5,
+      "name": "People & Costs",
+      "industry_average": 2.29
+    },
+    {
+      "id": 6,
+      "name": "Asset Management",
+      "industry_average": 2.95
+    },
+    {
+      "id": 7,
+      "name": "Design & Customers",
+      "industry_average": 3.57
+    },
+    {
+      "id": 8,
+      "name": "Vendor Management",
+      "industry_average": 2.89
+    },
+    {
+      "id": 9,
+      "name": "Metrics & Reporting",
+      "industry_average": 2.44
+    },
+    {
+      "id": 10,
+      "name": "Managing Change",
+      "industry_average": 3.02
+    }
+  ],
+  "companies": {
+    "Ion": {
+      "sustainability_leadership": 2.67,
+      "organization": 2.00,
+      "sustainability_risk_mgmt": 1.67,
+      "data_systems": 1.00,
+      "people_costs": 1.67,
+      "asset_management": 3.00,
+      "design_customers": 3.00,
+      "vendor_management": 1.00,
+      "metrics_reporting": 1.67,
+      "managing_change": 1.00
+    },
+    "Trigger": {
+      "sustainability_leadership": 2.00,
+      "organization": 1.50,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 3.33,
+      "people_costs": 1.33,
+      "asset_management": 3.33,
+      "design_customers": 4.00,
+      "vendor_management": 3.33,
+      "metrics_reporting": 1.00,
+      "managing_change": 2.33
+    },
+    "LionBot": {
+      "sustainability_leadership": 2.00,
+      "organization": 2.00,
+      "sustainability_risk_mgmt": 2.67,
+      "data_systems": 4.33,
+      "people_costs": 2.67,
+      "asset_management": 3.33,
+      "design_customers": 3.00,
+      "vendor_management": 4.00,
+      "metrics_reporting": 3.00,
+      "managing_change": 3.67
+    },
+    "Sunventor": {
+      "sustainability_leadership": 1.00,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 1.00,
+      "people_costs": 3.00,
+      "asset_management": 1.00,
+      "design_customers": 4.33,
+      "vendor_management": 2.33,
+      "metrics_reporting": 2.67,
+      "managing_change": 3.33
+    },
+    "Windee": {
+      "sustainability_leadership": 1.33,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 3.00,
+      "people_costs": 3.00,
+      "asset_management": 2.00,
+      "design_customers": 5.00,
+      "vendor_management": 3.67,
+      "metrics_reporting": 3.00,
+      "managing_change": 4.33
+    },
+    "Prism": {
+      "sustainability_leadership": 1.67,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 3.00,
+      "people_costs": 3.00,
+      "asset_management": 3.33,
+      "design_customers": 3.67,
+      "vendor_management": 3.00,
+      "metrics_reporting": 2.00,
+      "managing_change": 3.33
+    },
+    "Happie": {
+      "sustainability_leadership": 1.67,
+      "organization": 1.50,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 2.67,
+      "people_costs": 1.00,
+      "asset_management": 3.00,
+      "design_customers": 3.33,
+      "vendor_management": 2.00,
+      "metrics_reporting": 1.33,
+      "managing_change": 2.33
+    },
+    "Spin": {
+      "sustainability_leadership": 2.00,
+      "organization": 2.00,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 4.67,
+      "people_costs": 4.00,
+      "asset_management": 4.33,
+      "design_customers": 4.67,
+      "vendor_management": 3.67,
+      "metrics_reporting": 3.67,
+      "managing_change": 3.67
+    },
+    "Onewood": {
+      "sustainability_leadership": 2.00,
+      "organization": 1.50,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 4.00,
+      "people_costs": 3.33,
+      "asset_management": 4.33,
+      "design_customers": 3.33,
+      "vendor_management": 3.33,
+      "metrics_reporting": 3.33,
+      "managing_change": 4.00
+    },
+    "Ipse": {
+      "sustainability_leadership": 3.33,
+      "organization": 2.00,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 4.00,
+      "people_costs": 3.33,
+      "asset_management": 3.00,
+      "design_customers": 4.67,
+      "vendor_management": 4.33,
+      "metrics_reporting": 3.00,
+      "managing_change": 3.67
+    },
+    "Million": {
+      "sustainability_leadership": 1.33,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 2.00,
+      "people_costs": 1.33,
+      "asset_management": 3.00,
+      "design_customers": 3.33,
+      "vendor_management": 3.67,
+      "metrics_reporting": 2.67,
+      "managing_change": 2.67
+    },
+    "Doctor": {
+      "sustainability_leadership": 1.00,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 1.00,
+      "people_costs": 1.67,
+      "asset_management": 3.33,
+      "design_customers": 3.00,
+      "vendor_management": 2.00,
+      "metrics_reporting": 2.00,
+      "managing_change": 2.00
+    },
+    "Pepper": {
+      "sustainability_leadership": 2.00,
+      "organization": 1.50,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 2.33,
+      "people_costs": 2.67,
+      "asset_management": 3.00,
+      "design_customers": 4.00,
+      "vendor_management": 3.33,
+      "metrics_reporting": 3.67,
+      "managing_change": 3.33
+    },
+    "Sapphire": {
+      "sustainability_leadership": 1.00,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 2.67,
+      "people_costs": 2.00,
+      "asset_management": 3.00,
+      "design_customers": 2.67,
+      "vendor_management": 2.00,
+      "metrics_reporting": 2.67,
+      "managing_change": 2.67
+    },
+    "Greenturf": {
+      "sustainability_leadership": 2.00,
+      "organization": 1.50,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 1.67,
+      "people_costs": 1.33,
+      "asset_management": 2.67,
+      "design_customers": 3.33,
+      "vendor_management": 2.67,
+      "metrics_reporting": 2.00,
+      "managing_change": 3.67
+    },
+    "Apod": {
+      "sustainability_leadership": 1.33,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 1.00,
+      "people_costs": 1.00,
+      "asset_management": 2.33,
+      "design_customers": 2.00,
+      "vendor_management": 3.33,
+      "metrics_reporting": 2.67,
+      "managing_change": 3.00
+    },
+    "Edopod": {
+      "sustainability_leadership": 2.00,
+      "organization": 1.50,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 4.00,
+      "people_costs": 2.67,
+      "asset_management": 3.33,
+      "design_customers": 4.00,
+      "vendor_management": 3.33,
+      "metrics_reporting": 1.67,
+      "managing_change": 3.00
+    },
+    "Morning": {
+      "sustainability_leadership": 2.67,
+      "organization": 2.00,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 3.33,
+      "people_costs": 2.00,
+      "asset_management": 4.00,
+      "design_customers": 4.00,
+      "vendor_management": 2.67,
+      "metrics_reporting": 2.33,
+      "managing_change": 2.33
+    },
+    "Elmich": {
+      "sustainability_leadership": 2.00,
+      "organization": 2.00,
+      "sustainability_risk_mgmt": 1.33,
+      "data_systems": 3.67,
+      "people_costs": 3.33,
+      "asset_management": 3.33,
+      "design_customers": 3.67,
+      "vendor_management": 4.33,
+      "metrics_reporting": 3.33,
+      "managing_change": 3.33
+    },
+    "Luxconex": {
+      "sustainability_leadership": 1.00,
+      "organization": 1.00,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 1.00,
+      "people_costs": 1.00,
+      "asset_management": 1.00,
+      "design_customers": 2.33,
+      "vendor_management": 1.00,
+      "metrics_reporting": 1.67,
+      "managing_change": 3.00
+    },
+    "Synergraphic": {
+      "sustainability_leadership": 3.00,
+      "organization": 1.50,
+      "sustainability_risk_mgmt": 1.00,
+      "data_systems": 1.00,
+      "people_costs": 2.67,
+      "asset_management": 2.33,
+      "design_customers": 3.67,
+      "vendor_management": 1.67,
+      "metrics_reporting": 2.00,
+      "managing_change": 2.67
+    }
+  },
+  "analytics": {
+    "score_ranges": {
+      "min": 1.00,
+      "max": 5.00
+    },
+    "top_performers_by_category": {
+      "sustainability_leadership": "Ipse",
+      "organization": "Ion",
+      "sustainability_risk_mgmt": "LionBot",
+      "data_systems": "Spin",
+      "people_costs": "Spin",
+      "asset_management": "Onewood",
+      "design_customers": "Windee",
+      "vendor_management": "Elmich",
+      "metrics_reporting": "Pepper",
+      "managing_change": "Windee"
+    }
+  }
+}

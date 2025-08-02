@@ -29,26 +29,14 @@
                     <span class="element">Element: {{ question.element }}</span>
                 </div>
                 <div class="options">
+                    {% for value, label in responses.items() %}
                     <div class="option">
-                        <input type="radio" id="{{ question.questionId }}-1" name="{{ question.questionId }}" value="1" required>
-                        <label for="{{ question.questionId }}-1">1 - Resist - Minimal or no sustainability practices, reactive approach</label>
+                        <input type="radio" id="{{ question.questionId }}-{{ value }}" name="{{ question.questionId }}" value="{{ value }}" 
+                               {% if loop.first %}required{% endif %} 
+                               {% if debug_mode and value|int == debug_default_score %}checked{% endif %}>
+                        <label for="{{ question.questionId }}-{{ value }}">{{ value }} - {{ label }}</label>
                     </div>
-                    <div class="option">
-                        <input type="radio" id="{{ question.questionId }}-2" name="{{ question.questionId }}" value="2">
-                        <label for="{{ question.questionId }}-2">2 - Comply - Basic regulatory compliance, limited proactive measures</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="{{ question.questionId }}-3" name="{{ question.questionId }}" value="3">
-                        <label for="{{ question.questionId }}-3">3 - Optimize - Proactive sustainability improvements, some integration into business</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="{{ question.questionId }}-4" name="{{ question.questionId }}" value="4">
-                        <label for="{{ question.questionId }}-4">4 - Reinvent - Sustainability as core business driver, comprehensive approach</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="{{ question.questionId }}-5" name="{{ question.questionId }}" value="5">
-                        <label for="{{ question.questionId }}-5">5 - Lead - Industry leadership in sustainability, market shaping activities</label>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
             {% endfor %}
@@ -88,5 +76,13 @@
             }
         });
     </script>
+    {% if debug_mode %}
+    <script>
+        // Initial progress update for debug mode
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+    {% endif %}
 </body>
 </html> 

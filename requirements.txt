@@ -2,7 +2,6 @@ fastapi==0.104.1
 uvicorn[standard]
 python-multipart
 jinja2
-requests
 markdown
 playwright
 openai

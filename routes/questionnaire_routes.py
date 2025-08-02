@@ -6,8 +6,8 @@ import markdown
 from playwright.async_api import async_playwright
 
 from auth import require_login
-from config import USERS, QUESTIONS_DATA
-from services.langflow_service import format_questionnaire_for_langflow, call_langflow_api
+from config import USERS, QUESTIONS_DATA, DEBUG_MODE, DEBUG_DEFAULT_SCORE
+from services.questionnaire_processor import process_questionnaire_responses
 from services.openai_service import extract_sustainability_scores
 from services.chart_service import create_spider_chart
 
@@ -25,7 +25,10 @@ async def questionnaire_page(request: Request, current_user: str = Depends(requi
         "request": request,
         "user_name": USERS[current_user]['name'],
         "total_questions": len(QUESTIONS_DATA['questionnaireReference']),
-        "questions": QUESTIONS_DATA['questionnaireReference']
+        "questions": QUESTIONS_DATA['questionnaireReference'],
+        "responses": QUESTIONS_DATA['responses'],
+        "debug_mode": DEBUG_MODE,
+        "debug_default_score": DEBUG_DEFAULT_SCORE
     }
     
     return templates.TemplateResponse("questionnaire.html", context)
@@ -47,16 +50,14 @@ async def submit_questionnaire(
         if q_id in form_data:
             responses[q_id] = int(form_data[q_id])
     
-    # Format data for Langflow
-    formatted_data = format_questionnaire_for_langflow(current_user, responses)
-    
-    # Call Langflow API
-    langflow_result = call_langflow_api(formatted_data)
+    # Process questionnaire using new logic
+    company_name = USERS[current_user]['company']
+    processed_result = process_questionnaire_responses(current_user, responses, company_name)
     
     # Store the result in session for display on success page
     session_id = request.cookies.get("session_id")
     if session_id:
-        langflow_results[session_id] = langflow_result
+        langflow_results[session_id] = processed_result
     
     # In a real application, you would save this to a database
     response_data = {
@@ -65,7 +66,7 @@ async def submit_questionnaire(
         "total_questions": len(QUESTIONS_DATA["questionnaireReference"]),
         "answered_questions": len(responses),
         "responses": responses,
-        "langflow_result": langflow_result
+        "processed_result": processed_result
     }
     
     # Redirect to report page to display the Langflow analysis
@@ -106,11 +107,18 @@ async def report_page(request: Request, current_user: str = Depends(require_logi
                     extensions=['markdown.extensions.tables', 'markdown.extensions.fenced_code', 'markdown.extensions.toc']
                 )
                 
-                # Extract sustainability scores using OpenAI
-                sustainability_scores = extract_sustainability_scores(processed_content)
+                # Use spider chart from processed result if available
+                if "spider_chart_base64" in langflow_result:
+                    spider_chart_base64 = langflow_result["spider_chart_base64"]
                 
-                # Generate spider chart
-                spider_chart_base64 = create_spider_chart(sustainability_scores, USERS[current_user]['company'])
+                # Use spider chart model from processed result if available
+                if "spider_chart_model" in langflow_result:
+                    sustainability_scores = langflow_result["spider_chart_model"]
+                else:
+                    # Fallback to OpenAI extraction if needed
+                    sustainability_scores = extract_sustainability_scores(processed_content)
+                    if not spider_chart_base64:
+                        spider_chart_base64 = create_spider_chart(sustainability_scores, USERS[current_user]['company'])
                 
             except Exception as e:
                 print(f"Error converting markdown to HTML: {e}")
@@ -164,11 +172,18 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
                     extensions=['markdown.extensions.tables', 'markdown.extensions.fenced_code', 'markdown.extensions.toc']
                 )
                 
-                # Extract sustainability scores using OpenAI
-                sustainability_scores = extract_sustainability_scores(processed_content)
+                # Use spider chart from processed result if available
+                if "spider_chart_base64" in langflow_result:
+                    spider_chart_base64 = langflow_result["spider_chart_base64"]
                 
-                # Generate spider chart for PDF
-                spider_chart_base64 = create_spider_chart(sustainability_scores, USERS[current_user]['company'])
+                # Use spider chart model from processed result if available
+                if "spider_chart_model" in langflow_result:
+                    sustainability_scores = langflow_result["spider_chart_model"]
+                else:
+                    # Fallback to OpenAI extraction if needed
+                    sustainability_scores = extract_sustainability_scores(processed_content)
+                    if not spider_chart_base64:
+                        spider_chart_base64 = create_spider_chart(sustainability_scores, USERS[current_user]['company'])
                 
             except Exception as e:
                 print(f"Error converting markdown to HTML: {e}")
