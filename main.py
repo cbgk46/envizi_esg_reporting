@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+# Initialize Kaleido Chrome for chart generation
+import kaleido
+kaleido.get_chrome_sync()
+
 from routes.auth_routes import router as auth_router
 from routes.questionnaire_routes import router as questionnaire_router
 
