@@ -32,10 +32,10 @@
         }
     ],
     "responses": {
-        "1": "Resist - Minimal or no sustainability practices, reactive approach",
-        "2": "Comply - Basic regulatory compliance, limited proactive measures",
-        "3": "Optimize - Proactive sustainability improvements, some integration into business",
-        "4": "Reinvent - Sustainability as core business driver, comprehensive approach",
-        "5": "Lead - Industry leadership in sustainability, market shaping activities"
+        "1": "Strongly disagree",
+        "2": "Somewhat disagree",
+        "3": "Neither agree nor disagree",
+        "4": "Somewhat agree",
+        "5": "Strongly agree"
     }
 }
