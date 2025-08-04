@@ -29,6 +29,156 @@
             "dimension": "Organization",
             "element": "Governance",
             "question": "We have policies on Sustainability in our organization"
+        },
+        {
+            "questionId": "Q06",
+            "dimension": "Sustainability Risk Management",
+            "element": "Risk Framework",
+            "question": "Our organization has a Sustainability Risk Framework"
+        },
+        {
+            "questionId": "Q07",
+            "dimension": "Sustainability Risk Management",
+            "element": "Performance Management",
+            "question": "We produce an audited sustainability report which captures our carbon emission, water usage, waste pollution, energy efficiency"
+        },
+        {
+            "questionId": "Q08",
+            "dimension": "Sustainability Risk Management",
+            "element": "Compliance Processes",
+            "question": "We have a compliance process in our organziation"
+        },
+        {
+            "questionId": "Q09",
+            "dimension": "Data & Systems",
+            "element": "Access to data",
+            "question": "We collect Sustainability information such as Power usage, waste generated, water usage"
+        },
+        {
+            "questionId": "Q10",
+            "dimension": "Data & Systems",
+            "element": "Actionable Insights",
+            "question": "We use our Sustainability Data to design new products or new processes"
+        },
+        {
+            "questionId": "Q11",
+            "dimension": "Data & Systems",
+            "element": "Technology Application",
+            "question": "We use software applications like excel to track our organization's Sustainability measurements"
+        },
+        {
+            "questionId": "Q12",
+            "dimension": "People & Competency",
+            "element": "Skills Requirement",
+            "question": "We are aware of Singapore Green Plan 2030 Key Targets"
+        },
+        {
+            "questionId": "Q13",
+            "dimension": "People & Competency",
+            "element": "Training & Development",
+            "question": "Our Workforce has been given training in Sustainability practices like decarbonisation, circular economy, sustainability reporting, carbon management and waste management"
+        },
+        {
+            "questionId": "Q14",
+            "dimension": "People & Competency",
+            "element": "Sustainability Costs",
+            "question": "We believe Sustainable practices are economical to embrace. e.g. waste management"
+        },
+        {
+            "questionId": "Q15",
+            "dimension": "Asset Management",
+            "element": "Asset Planning",
+            "question": "Our Organization owned non-movable assets are purchased or designed with sustainability in mind"
+        },
+        {
+            "questionId": "Q16",
+            "dimension": "Asset Management",
+            "element": "Asset Delivery",
+            "question": "Our organization has a digital strategy to do our business and we are a paperless organization"
+        },
+        {
+            "questionId": "Q17",
+            "dimension": "Asset Management",
+            "element": "Asset Management",
+            "question": "We measure carbon footprint of our organization owned assets"
+        },
+        {
+            "questionId": "Q18",
+            "dimension": "Product Management",
+            "element": "Design",
+            "question": "Our organization designs products and services which are sustainable"
+        },
+        {
+            "questionId": "Q19",
+            "dimension": "Product Management",
+            "element": "Manufacture",
+            "question": "We build our products keeping sustainability criterias"
+        },
+        {
+            "questionId": "Q20",
+            "dimension": "Product Management",
+            "element": "Sales & marketing",
+            "question": "Our marketing team highlight Sustainability features of our product"
+        },
+        {
+            "questionId": "Q21",
+            "dimension": "Product Management",
+            "element": "Circularity",
+            "question": "We practice circular economy for our products"
+        },
+        {
+            "questionId": "Q22",
+            "dimension": "Vendor Management",
+            "element": "Supplier Base",
+            "question": "We collect audited Sustainability reports from our suppliers."
+        },
+        {
+            "questionId": "Q23",
+            "dimension": "Vendor Management",
+            "element": "Raw Materials",
+            "question": "We source raw materials based on their sustainability characteristics and traceability"
+        },
+        {
+            "questionId": "Q24",
+            "dimension": "Vendor Management",
+            "element": "Supplier Accreditation",
+            "question": "We ensure our Supplier organization has the relevant sustainability accreditation like environmental management system (ISO 14001)"
+        },
+        {
+            "questionId": "Q25",
+            "dimension": "Metrics & Reporting",
+            "element": "Risk Management",
+            "question": "We are aware of the penalties by National Environment Agency for unsustainable practices like Green House Gas emissions"
+        },
+        {
+            "questionId": "Q26",
+            "dimension": "Metrics & Reporting",
+            "element": "ESG Management",
+            "question": "We produce an ESG Report"
+        },
+        {
+            "questionId": "Q27",
+            "dimension": "Metrics & Reporting",
+            "element": "Regulatory Management/ Understanding",
+            "question": "We work with key stakeholders such as industry, regulations, customers etc to shape the regulations in our industry"
+        },
+        {
+            "questionId": "Q28",
+            "dimension": "Managing Change",
+            "element": "Market Activation",
+            "question": "We work with Partners and our competition to drive cross Industry Sustainability change"
+        },
+        {
+            "questionId": "Q29",
+            "dimension": "Managing Change",
+            "element": "New Business Models",
+            "question": "We have built our own sustainable operating model like a checklist list to ensure sustainable practices"
+        },
+        {
+            "questionId": "Q30",
+            "dimension": "Managing Change",
+            "element": "Responsive Operations",
+            "question": "We have Sustainability KPIs"
         }
     ],
     "responses": {

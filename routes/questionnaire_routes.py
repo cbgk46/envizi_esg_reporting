@@ -43,16 +43,51 @@ async def submit_questionnaire(
     # Get form data
     form_data = await request.form()
     
-    # Process responses
+    # Extract general information fields
+    general_info = {
+        "company": form_data.get("company", "").strip(),
+        "name": form_data.get("name", "").strip(),
+        "email": form_data.get("email", "").strip(),
+        "industry": form_data.get("industry", "").strip(),
+        "employees": form_data.get("employees", "").strip(),
+        "headquarters": form_data.get("headquarters", "").strip(),
+        "products": form_data.get("products", "").strip(),
+        "manufacturing_location": form_data.get("manufacturing_location", "").strip(),
+        "profile": form_data.get("profile", "").strip()
+    }
+    
+    # Validate required general information fields
+    required_fields = ["company", "name", "email", "industry", "employees", "headquarters"]
+    missing_fields = [field for field in required_fields if not general_info[field]]
+    
+    if missing_fields:
+        # In a real application, you'd handle this error more gracefully
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Missing required fields: {', '.join(missing_fields)}"
+        )
+    
+    # Process sustainability questionnaire responses
     responses = {}
     for question_id in QUESTIONS_DATA["questionnaireReference"]:
         q_id = question_id["questionId"]
         if q_id in form_data:
             responses[q_id] = int(form_data[q_id])
     
-    # Process questionnaire using new logic
-    company_name = USERS[current_user]['company']
+    # Update user information with general info (for this session)
+    # In a real application, you'd save this to a database
+    if current_user in USERS:
+        USERS[current_user].update({
+            "general_info": general_info,
+            "last_updated": str(datetime.now())
+        })
+    
+    # Process questionnaire using new logic with updated company name
+    company_name = general_info["company"]  # Use the form company name instead of config
     processed_result = process_questionnaire_responses(current_user, responses, company_name)
+    
+    # Add general information to the processed result
+    processed_result["general_information"] = general_info
     
     # Store the result in session for display on success page
     session_id = request.cookies.get("session_id")
@@ -63,6 +98,7 @@ async def submit_questionnaire(
     response_data = {
         "user": current_user,
         "timestamp": str(request.headers.get("date", "")),
+        "general_information": general_info,
         "total_questions": len(QUESTIONS_DATA["questionnaireReference"]),
         "answered_questions": len(responses),
         "responses": responses,
@@ -82,10 +118,15 @@ async def report_page(request: Request, current_user: str = Depends(require_logi
     html_content = None
     spider_chart_base64 = None
     sustainability_scores = None
+    general_information = None
     session_id = request.cookies.get("session_id")
     
     if session_id and session_id in langflow_results:
         langflow_result = langflow_results[session_id]
+        
+        # Extract general information if available in langflow result
+        if langflow_result and "general_information" in langflow_result:
+            general_information = langflow_result["general_information"]
         
         # Extract markdown content if available
         if langflow_result and langflow_result.get("success") and "extracted_text" in langflow_result:
@@ -118,11 +159,17 @@ async def report_page(request: Request, current_user: str = Depends(require_logi
                     # Fallback to OpenAI extraction if needed
                     sustainability_scores = extract_sustainability_scores(processed_content)
                     if not spider_chart_base64:
-                        spider_chart_base64 = create_spider_chart(sustainability_scores, USERS[current_user]['company'])
+                        # Use company name from general info if available, otherwise fallback to user config
+                        company_name = general_information.get("company") if general_information else USERS[current_user]['company']
+                        spider_chart_base64 = create_spider_chart(sustainability_scores, company_name)
                 
             except Exception as e:
                 print(f"Error converting markdown to HTML: {e}")
                 html_content = f"<pre>{markdown_content}</pre>"
+    
+    # Fallback to user's general info if not in langflow result
+    if not general_information and current_user in USERS and "general_info" in USERS[current_user]:
+        general_information = USERS[current_user]["general_info"]
     
     context = {
         "request": request,
@@ -132,7 +179,8 @@ async def report_page(request: Request, current_user: str = Depends(require_logi
         "markdown_content": markdown_content,
         "html_content": html_content,
         "spider_chart_base64": spider_chart_base64,
-        "sustainability_scores": sustainability_scores
+        "sustainability_scores": sustainability_scores,
+        "general_information": general_information
     }
     
     return templates.TemplateResponse("report.html", context)

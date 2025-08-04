@@ -6,6 +6,9 @@ A FastAPI application with user authentication and questionnaire functionality, 
 
 - 🔐 Secure login system with session management
 - 📋 Interactive questionnaire with multiple question types
+- 🤖 AI-powered sustainability insights with real-time web search
+- 🕷️ Spider chart visualization for sustainability dimensions
+- 📊 Comprehensive sustainability maturity reports
 - 🎨 Beautiful, modern UI with glassmorphism design
 - 📚 Auto-generated API documentation
 - ❤️ Health check endpoint
@@ -17,14 +20,34 @@ A FastAPI application with user authentication and questionnaire functionality, 
 - **Username:** `faiz`
 - **Password:** `envizi`
 
+## API Keys Required
+
+This application requires the following API keys:
+
+1. **OpenAI API Key**: Get from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. **Tavily API Key**: Get from [Tavily](https://tavily.com/) (Free tier: 1,000 searches/month)
+
+Copy the `.env.example` file to `.env` and add your API keys:
+```bash
+cp .env.example .env
+# Edit .env with your actual API keys
+```
+
 ## Installation
+
+### Local Development
 
 1. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Run the application:**
+2. **Install Playwright browsers:**
+   ```bash
+   playwright install
+   ```
+
+3. **Run the application:**
    ```bash
    python main.py
    ```
@@ -33,6 +56,51 @@ A FastAPI application with user authentication and questionnaire functionality, 
    ```bash
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
+
+### Production Deployment
+
+For deployment to remote servers (handles Kaleido Chrome and Playwright browser installation):
+
+**Option 1: Using the Python setup script**
+```bash
+# Install Python dependencies first
+pip install -r requirements.txt
+
+# Run the deployment setup script
+python setup_deployment.py
+
+# Start the application
+python main.py
+```
+
+**Option 2: Using the bash setup script (recommended)**
+```bash
+# Make the script executable
+chmod +x setup_deployment.sh
+
+# Run the complete setup
+./setup_deployment.sh
+
+# The script handles everything including starting instructions
+```
+
+**Option 3: Manual setup**
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Install Playwright browsers (Chromium only for production)
+playwright install chromium
+
+# Initialize Kaleido Chrome
+python -c "import kaleido; kaleido.get_chrome_sync()"
+
+# Start the application
+python main.py
+```
+
+**Environment Variables for Production:**
+- Set `ENVIRONMENT=production` for optimized browser installation (Chromium only)
 
 ## Usage
 

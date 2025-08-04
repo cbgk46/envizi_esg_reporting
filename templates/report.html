@@ -24,6 +24,55 @@
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
         
+        .company-info-section {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+        
+        .company-info-section h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        
+        .company-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-item .label {
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            opacity: 0.8;
+        }
+        
+        .info-item .value {
+            color: #fff;
+            font-size: 1rem;
+            word-wrap: break-word;
+        }
+        
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+        
         .report-content {
             background: rgba(255, 255, 255, 0.05);
             padding: 2rem;
@@ -68,100 +117,136 @@
         }
         
         .markdown-content blockquote {
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #000000;
             margin: 1rem 0;
-            padding: 1rem 1.5rem;
-            background: rgba(76, 175, 80, 0.1);
-            border-radius: 0 8px 8px 0;
+            padding-left: 1rem;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.8);
         }
         
         .markdown-content table {
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
         
         .markdown-content th, .markdown-content td {
-            padding: 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.8rem;
             text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            color: #000000;
         }
         
         .markdown-content th {
-            background: rgba(76, 175, 80, 0.2);
+            background: rgba(0, 0, 0, 0.1);
             font-weight: bold;
         }
         
         .markdown-content code {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
             padding: 0.2rem 0.4rem;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
+            color: #000000;
         }
         
         .markdown-content pre {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.1);
             padding: 1rem;
             border-radius: 8px;
             overflow-x: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.2);
         }
         
-        .error-message {
-            color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 107, 107, 0.3);
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .error-message, .loading-message {
             text-align: center;
-            margin: 2rem 0;
+            padding: 2rem;
+            color: #ff6b6b;
         }
         
         .loading-message {
-            color: #ffa726;
-            background: rgba(255, 167, 38, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 167, 38, 0.3);
-            text-align: center;
-            margin: 2rem 0;
+            color: #4CAF50;
         }
         
         .buttons {
-            text-align: center;
-            margin-top: 2rem;
-            gap: 1rem;
             display: flex;
+            gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .buttons a {
-            padding: 0.8rem 1.5rem;
-            background: linear-gradient(45deg, #4CAF50, #45a049);
+        a {
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .spider-chart-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        
+        .spider-chart-section h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+        
+        .spider-chart-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .score-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .buttons a:hover {
-            background: linear-gradient(45deg, #45a049, #4CAF50);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        .score-item h4 {
+            color: #4CAF50;
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
         }
         
-        .buttons a[href="/download-pdf"] {
-            background: linear-gradient(45deg, #2196F3, #1976D2);
-            border: 1px solid rgba(33, 150, 243, 0.3);
-        }
-        
-        .buttons a[href="/download-pdf"]:hover {
-            background: linear-gradient(45deg, #1976D2, #2196F3);
-            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        .score-item .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
         }
     </style>
 </head>
@@ -173,28 +258,97 @@
             <p><small>Based on your responses to {{ total_questions }} sustainability questions</small></p>
         </div>
         
+        <!-- Company Information Section -->
+        {% if general_information %}
+        <div class="company-info-section">
+            <h3>🏢 Company Information</h3>
+            <div class="company-info-grid">
+                <div class="info-item">
+                    <div class="label">Company</div>
+                    <div class="value">{{ general_information.company }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Industry</div>
+                    <div class="value">{{ general_information.industry }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Number of Employees</div>
+                    <div class="value">{{ general_information.employees }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Headquarters</div>
+                    <div class="value">{{ general_information.headquarters }}</div>
+                </div>
+                {% if general_information.products %}
+                <div class="info-item full-width">
+                    <div class="label">Products/Services</div>
+                    <div class="value">{{ general_information.products }}</div>
+                </div>
+                {% endif %}
+                {% if general_information.manufacturing_location %}
+                <div class="info-item full-width">
+                    <div class="label">Manufacturing Location</div>
+                    <div class="value">{{ general_information.manufacturing_location }}</div>
+                </div>
+                {% endif %}
+                {% if general_information.profile %}
+                <div class="info-item full-width">
+                    <div class="label">Company Profile</div>
+                    <div class="value">{{ general_information.profile }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
         <div class="report-content">
             {% if spider_chart_base64 %}
-                <div class="spider-chart-section" style="text-align: center; margin-bottom: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 10px;">
-                    <h3 style="color: #4CAF50; margin-bottom: 1rem;">📊 Sustainability Maturity Assessment Radar</h3>
+                <div class="spider-chart-section">
+                    <h3>📊 Sustainability Maturity Assessment Radar</h3>
                     <img src="data:image/png;base64,{{ spider_chart_base64 }}" 
-                         alt="Sustainability Spider Chart" 
-                         style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                         alt="Sustainability Spider Chart">
                     
                     {% if sustainability_scores %}
-                        <div class="scores-summary" style="margin-top: 1rem; text-align: left; display: inline-block;">
-                            <h4 style="color: #4CAF50; text-align: center; margin-bottom: 0.5rem;">Dimension Scores (1-5 Scale)</h4>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.9rem;">
-                                <div>📈 Sustainability Leadership: <strong>{{ sustainability_scores.sustainability_leadership }}</strong></div>
-                                <div>🏢 Organization Structure: <strong>{{ sustainability_scores.organization }}</strong></div>
-                                <div>⚠️ Risk Management: <strong>{{ sustainability_scores.sustainability_risk_management }}</strong></div>
-                                <div>💾 Data Systems: <strong>{{ sustainability_scores.data_systems }}</strong></div>
-                                <div>👥 People & Competency: <strong>{{ sustainability_scores.people_competency }}</strong></div>
-                                <div>🏭 Asset Management: <strong>{{ sustainability_scores.direct_asset_management }}</strong></div>
-                                <div>📦 Product Management: <strong>{{ sustainability_scores.product_management }}</strong></div>
-                                <div>🤝 Vendor Management: <strong>{{ sustainability_scores.vendor_management }}</strong></div>
-                                <div>📊 Metrics & Reporting: <strong>{{ sustainability_scores.metrics_reporting }}</strong></div>
-                                <div>🔄 Managing Change: <strong>{{ sustainability_scores.managing_change }}</strong></div>
+                        <div class="scores-grid">
+                            <div class="score-item">
+                                <h4>Sustainability Leadership</h4>
+                                <div class="score">{{ sustainability_scores.sustainability_leadership }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Organization</h4>
+                                <div class="score">{{ sustainability_scores.organization }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Risk Management</h4>
+                                <div class="score">{{ sustainability_scores.sustainability_risk_management }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Data Systems</h4>
+                                <div class="score">{{ sustainability_scores.data_systems }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>People & Competency</h4>
+                                <div class="score">{{ sustainability_scores.people_competency }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Asset Management</h4>
+                                <div class="score">{{ sustainability_scores.direct_asset_management }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Product Management</h4>
+                                <div class="score">{{ sustainability_scores.product_management }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Vendor Management</h4>
+                                <div class="score">{{ sustainability_scores.vendor_management }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Metrics & Reporting</h4>
+                                <div class="score">{{ sustainability_scores.metrics_reporting }}</div>
+                            </div>
+                            <div class="score-item">
+                                <h4>Managing Change</h4>
+                                <div class="score">{{ sustainability_scores.managing_change }}</div>
                             </div>
                         </div>
                     {% endif %}

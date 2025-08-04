@@ -3,8 +3,8 @@ import plotly.graph_objects as go
 import plotly.io as pio
 import base64
 from models import SpiderChartModel
-from config import QUESTIONS_DATA, RECOMMENDATIONS_DATA, SURVEY_DATA, DIMENSION_MAPPING
-from services.openai_service import generate_executive_summary
+from config import QUESTIONS_DATA, RECOMMENDATIONS_DATA, SURVEY_DATA, DIMENSION_MAPPING, USERS
+from services.openai_service import generate_executive_summary, get_company_sustainability_insights
 
 def calculate_dimension_averages(responses: Dict[str, int]) -> Dict[str, float]:
     """Calculate average scores for each dimension based on user responses"""
@@ -195,7 +195,7 @@ def create_spider_chart_model(user_scores: Dict[str, float]) -> SpiderChartModel
     
     return SpiderChartModel(**chart_data)
 
-def generate_sustainability_report(user_scores: Dict[str, float], company_name: str) -> str:
+def generate_sustainability_report(user_scores: Dict[str, float], company_name: str, industry: str = None) -> str:
     """Generate a comprehensive sustainability report in markdown format"""
     
     report_sections = []
@@ -218,6 +218,16 @@ def generate_sustainability_report(user_scores: Dict[str, float], company_name: 
     overall_maturity = determine_maturity_level(overall_score)
     report_sections.append(f"**Overall Sustainability Maturity Score:** {overall_score}/5.0")
     report_sections.append(f"**Overall Maturity Level:** {overall_maturity.title()}")
+    report_sections.append("")
+    
+    # AI-Powered Company Sustainability Insights
+    report_sections.append("## 🔍 Company-Specific Sustainability Insights")
+    try:
+        sustainability_insights = get_company_sustainability_insights(company_name, industry)
+        report_sections.append(sustainability_insights)
+    except Exception as e:
+        print(f"Error generating sustainability insights: {e}")
+        report_sections.append("*Sustainability insights are currently unavailable. Please ensure API keys are configured.*")
     report_sections.append("")
     
     # Dimension Analysis
@@ -291,7 +301,8 @@ def process_questionnaire_responses(current_user: str, responses: Dict[str, int]
     spider_chart_model = create_spider_chart_model(dimension_averages)
     
     # Step 4: Generate comprehensive report
-    sustainability_report = generate_sustainability_report(dimension_averages, company_name)
+    user_industry = USERS.get(current_user, {}).get('industry', None)
+    sustainability_report = generate_sustainability_report(dimension_averages, company_name, user_industry)
     
     # Step 5: Prepare result structure similar to langflow result
     result = {

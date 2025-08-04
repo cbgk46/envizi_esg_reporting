@@ -5,13 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sustainability Questionnaire - FastAPI App</title>
     <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        /* Additional styles for general information section */
+        .general-info-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .general-info-section h2 {
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 280px;
+        }
+        
+        .form-group.full-width {
+            flex-basis: 100%;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #fff;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .form-group input[type="text"]::placeholder,
+        .form-group input[type="email"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .form-group select {
+            cursor: pointer;
+        }
+        
+        .form-group select option {
+            background: #333;
+            color: white;
+        }
+        
+        .sustainability-questions {
+            margin-top: 2rem;
+        }
+        
+        .sustainability-questions h2 {
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body class="questionnaire-page">
     <div class="header">
         <h1>🌱 Sustainability Questionnaire</h1>
         <div class="welcome">
-            Welcome, <strong>{{ user_name }}</strong>! Please complete the sustainability assessment below.
-            <br><small>This questionnaire contains {{ total_questions }} questions across multiple sustainability dimensions.</small>
+            Welcome, <strong>{{ user_name }}</strong>! Please complete the general information and sustainability assessment below.
+            <br><small>This questionnaire contains general information fields and {{ total_questions }} sustainability questions across multiple dimensions.</small>
         </div>
     </div>
     
@@ -21,25 +112,112 @@
         </div>
         
         <form method="POST" action="/submit-questionnaire" id="questionnaire-form">
-            {% for question in questions %}
-            <div class="question">
-                <h3>{{ loop.index }}. {{ question.question }}</h3>
-                <div class="question-meta">
-                    <span class="dimension">Dimension: {{ question.dimension }}</span>
-                    <span class="element">Element: {{ question.element }}</span>
-                </div>
-                <div class="options">
-                    {% for value, label in responses.items() %}
-                    <div class="option">
-                        <input type="radio" id="{{ question.questionId }}-{{ value }}" name="{{ question.questionId }}" value="{{ value }}" 
-                               {% if loop.first %}required{% endif %} 
-                               {% if debug_mode and value|int == debug_default_score %}checked{% endif %}>
-                        <label for="{{ question.questionId }}-{{ value }}">{{ value }} - {{ label }}</label>
+            <!-- General Information Section -->
+            <div class="general-info-section">
+                <h2>📋 General Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="company">Company *</label>
+                        <input type="text" id="company" name="company" placeholder="Enter company name" required>
                     </div>
-                    {% endfor %}
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="industry">Industry *</label>
+                        <select id="industry" name="industry" required>
+                            <option value="">Select Industry</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Food & Beverage">Food & Beverage</option>
+                            <option value="Energy">Energy</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="employees">Number of Employees *</label>
+                        <select id="employees" name="employees" required>
+                            <option value="">Select Employee Count</option>
+                            <option value="1-10">1-10</option>
+                            <option value="11-50">11-50</option>
+                            <option value="51-200">51-200</option>
+                            <option value="201-500">201-500</option>
+                            <option value="501-1000">501-1000</option>
+                            <option value="1000+">1000+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="headquarters">Headquarters *</label>
+                        <input type="text" id="headquarters" name="headquarters" placeholder="Enter headquarters location" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="products">Products/Services</label>
+                        <input type="text" id="products" name="products" placeholder="Describe your main products or services">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="manufacturing_location">Manufacturing Location</label>
+                        <input type="text" id="manufacturing_location" name="manufacturing_location" placeholder="Enter manufacturing location (if applicable)">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="profile">Company Profile</label>
+                        <input type="text" id="profile" name="profile" placeholder="Brief description of your company">
+                    </div>
                 </div>
             </div>
-            {% endfor %}
+            
+            <!-- Sustainability Questions Section -->
+            <div class="sustainability-questions">
+                <h2>🌱 Sustainability Assessment</h2>
+                
+                {% for question in questions %}
+                <div class="question">
+                    <h3>{{ loop.index }}. {{ question.question }}</h3>
+                    <div class="question-meta">
+                        <span class="dimension">Dimension: {{ question.dimension }}</span>
+                        <span class="element">Element: {{ question.element }}</span>
+                    </div>
+                    <div class="options">
+                        {% for value, label in responses.items() %}
+                        <div class="option">
+                            <input type="radio" id="{{ question.questionId }}-{{ value }}" name="{{ question.questionId }}" value="{{ value }}" 
+                                   {% if loop.first %}required{% endif %} 
+                                   {% if debug_mode and value|int == debug_default_score %}checked{% endif %}>
+                            <label for="{{ question.questionId }}-{{ value }}">{{ value }} - {{ label }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
             
             <div style="text-align: center; margin-top: 2rem;">
                 <button type="submit">Submit Questionnaire</button>
@@ -53,27 +231,69 @@
         const form = document.getElementById('questionnaire-form');
         const progressBar = document.getElementById('progress');
         const totalQuestions = {{ total_questions }};
+        const generalInfoFields = ['company', 'name', 'email', 'industry', 'employees', 'headquarters'];
         
         function updateProgress() {
+            // Count filled general info fields (required ones)
+            let filledGeneralInfo = 0;
+            generalInfoFields.forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                if (field && field.value.trim() !== '') {
+                    filledGeneralInfo++;
+                }
+            });
+            
+            // Count answered sustainability questions
             const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
-            const progress = (answeredQuestions / totalQuestions) * 100;
+            
+            // Calculate progress (general info fields + sustainability questions)
+            const totalItems = generalInfoFields.length + totalQuestions;
+            const completedItems = filledGeneralInfo + answeredQuestions;
+            const progress = (completedItems / totalItems) * 100;
             progressBar.style.width = progress + '%';
         }
         
-        // Update progress when radio buttons change
+        // Update progress when form fields change
         document.addEventListener('change', function(e) {
-            if (e.target.type === 'radio') {
+            updateProgress();
+        });
+        
+        document.addEventListener('input', function(e) {
+            if (e.target.type === 'text' || e.target.type === 'email') {
                 updateProgress();
             }
         });
         
         // Form validation
         form.addEventListener('submit', function(e) {
+            // Check general info required fields
+            let missingGeneralInfo = [];
+            generalInfoFields.forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                if (field && field.value.trim() === '') {
+                    missingGeneralInfo.push(field.previousElementSibling.textContent.replace(' *', ''));
+                }
+            });
+            
+            // Check sustainability questions
             const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
-            if (answeredQuestions < totalQuestions) {
+            
+            if (missingGeneralInfo.length > 0 || answeredQuestions < totalQuestions) {
                 e.preventDefault();
-                alert('Please answer all questions before submitting.');
+                let message = '';
+                if (missingGeneralInfo.length > 0) {
+                    message += 'Please fill in the following required fields: ' + missingGeneralInfo.join(', ') + '.\n';
+                }
+                if (answeredQuestions < totalQuestions) {
+                    message += 'Please answer all sustainability questions before submitting.';
+                }
+                alert(message);
             }
+        });
+        
+        // Initial progress update
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
         });
     </script>
     {% if debug_mode %}
