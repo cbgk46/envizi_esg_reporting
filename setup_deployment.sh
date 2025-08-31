@@ -108,24 +108,49 @@ except Exception as e:
 
 # Install Playwright system dependencies first
 echo "🔧 Installing Playwright system dependencies..."
-playwright install-deps || {
-    echo "⚠️  Failed to install system dependencies - you may need to run this with sudo:"
-    echo "   sudo playwright install-deps"
-    echo "   or manually install system dependencies for your OS"
-}
+if ! playwright install-deps; then
+    echo "⚠️  Standard installation failed, trying with sudo..."
+    if ! sudo playwright install-deps; then
+        echo "❌ CRITICAL: Failed to install Playwright system dependencies!"
+        echo "   This will prevent PDF generation from working."
+        echo "   Manual installation required - check system compatibility."
+        exit 1
+    fi
+fi
 
 # Install Playwright browsers
 echo "🌐 Installing Playwright browsers..."
 if [ "$ENVIRONMENT" = "production" ] || [ "$ENVIRONMENT" = "PRODUCTION" ]; then
-    playwright install chromium || {
-        echo "❌ Failed to install Chromium"
-        exit 1
-    }
+    echo "📦 Installing Chromium only (production mode)..."
+    if ! playwright install chromium; then
+        echo "⚠️  Standard installation failed, trying with --force..."
+        if ! playwright install chromium --force; then
+            echo "❌ CRITICAL: Failed to install Chromium browser!"
+            echo "   PDF generation will not work without browser installation."
+            exit 1
+        fi
+    fi
 else
-    playwright install || {
-        echo "❌ Failed to install browsers"
-        exit 1
-    }
+    echo "📦 Installing all browsers (development mode)..."
+    if ! playwright install; then
+        echo "⚠️  Standard installation failed, trying with --force..."
+        if ! playwright install --force; then
+            echo "❌ CRITICAL: Failed to install Playwright browsers!"
+            echo "   PDF generation will not work without browser installation."
+            exit 1
+        fi
+    fi
+fi
+
+# Verify Playwright installation
+echo "🔍 Verifying Playwright browser installation..."
+if ! playwright list | grep -i "chromium"; then
+    echo "❌ CRITICAL: Chromium browser not found after installation!"
+    echo "   Available browsers:"
+    playwright list || echo "   Failed to list browsers"
+    exit 1
+else
+    echo "✅ Chromium browser successfully installed"
 fi
 
 # Run deployment setup
