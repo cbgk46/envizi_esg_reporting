@@ -191,8 +191,12 @@ def generate_sustainability_report(user_scores: Dict[str, float], company_name: 
     report_sections.append("")
     
     # Overall Score Information
-    overall_score = round(sum(user_scores.values()) / len(user_scores), 2)
-    overall_maturity = determine_maturity_level(overall_score)
+    if len(user_scores) > 0:
+        overall_score = round(sum(user_scores.values()) / len(user_scores), 2)
+        overall_maturity = determine_maturity_level(overall_score)
+    else:
+        overall_score = 0.0
+        overall_maturity = "resist"
     report_sections.append(f"**Overall Sustainability Maturity Score:** {overall_score}/5.0")
     report_sections.append(f"**Overall Maturity Level:** {overall_maturity.title()}")
     report_sections.append("")
@@ -301,8 +305,8 @@ def process_questionnaire_responses(current_user: str, responses: Dict[str, int]
         "dimension_scores": dimension_averages,
         "spider_chart_base64": spider_chart_base64,
         "spider_chart_model": spider_chart_model,
-        "overall_score": round(sum(dimension_averages.values()) / len(dimension_averages), 2),
-        "maturity_level": determine_maturity_level(round(sum(dimension_averages.values()) / len(dimension_averages), 2)),
+        "overall_score": round(sum(dimension_averages.values()) / len(dimension_averages), 2) if len(dimension_averages) > 0 else 0.0,
+        "maturity_level": determine_maturity_level(round(sum(dimension_averages.values()) / len(dimension_averages), 2) if len(dimension_averages) > 0 else 0.0),
         "chart_type": chart_type
     }
     

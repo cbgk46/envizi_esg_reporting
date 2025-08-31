@@ -61,6 +61,7 @@ def test_chart_method_fallback():
     
     # Test different chart methods
     methods_to_test = ["matplotlib", "svg", "html"]
+    success_count = 0
     
     for method in methods_to_test:
         print(f"\nTesting {method} method:")
@@ -76,9 +77,12 @@ def test_chart_method_fallback():
             print(f"  ✓ {method} method successful")
             print(f"    Chart type used: {result.get('chart_type', 'unknown')}")
             print(f"    Chart data length: {len(result.get('spider_chart_base64', ''))}")
+            success_count += 1
             
         except Exception as e:
             print(f"  ✗ {method} method failed: {e}")
+    
+    return success_count == len(methods_to_test)
 
 
 def test_kaleido_disabled_fallback():
