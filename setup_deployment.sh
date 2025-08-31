@@ -18,6 +18,13 @@ pip install -r requirements.txt || {
     exit 1
 }
 
+# Install Chrome for Kaleido chart generation
+echo "📊 Installing Chrome for Kaleido chart generation..."
+plotly_get_chrome || {
+    echo "⚠️  Failed to install Chrome for Kaleido - charts may not work in PDF reports"
+    echo "   You can try installing manually or running again"
+}
+
 # Install Playwright system dependencies first
 echo "🔧 Installing Playwright system dependencies..."
 playwright install-deps || {

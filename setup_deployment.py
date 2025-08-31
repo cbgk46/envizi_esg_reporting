@@ -34,6 +34,10 @@ def run_command(command, description):
         logger.error(f"Command failed: {command} - {e.stderr.strip()}")
         return False
 
+def setup_kaleido_chrome():
+    """Install Chrome for Kaleido chart generation"""
+    return run_command("plotly_get_chrome", "Installing Chrome for Kaleido chart generation")
+
 def test_kaleido():
     """Test Kaleido installation and chart generation capability"""
     print("🔄 Testing Kaleido chart generation...")
@@ -54,7 +58,20 @@ def test_kaleido():
         return True
     except Exception as e:
         print(f"⚠️  Kaleido test failed: {e}")
-        print("   📝 Note: Kaleido will auto-initialize when first used by the application")
+        if "Chrome" in str(e) or "kaleido" in str(e).lower():
+            print("   🔧 Attempting to install Chrome for Kaleido...")
+            if setup_kaleido_chrome():
+                print("   ✅ Chrome installed, retrying Kaleido test...")
+                try:
+                    img_bytes = pio.to_image(fig, format="png", width=400, height=300)
+                    print(f"✅ Kaleido chart generation now working: {len(img_bytes)} bytes generated")
+                    return True
+                except Exception as retry_e:
+                    print(f"   ❌ Kaleido still failing after Chrome install: {retry_e}")
+            else:
+                print("   ❌ Failed to install Chrome for Kaleido")
+        
+        print("   📝 Note: Charts may not be available in PDF reports")
         logger.warning(f"Kaleido test failed: {e}")
         # Don't fail the setup for Kaleido issues since we have lazy initialization
         return True
@@ -166,13 +183,18 @@ def main():
         if not test_playwright():
             success = False
     
-    # Step 4: Test Kaleido (non-blocking)
-    print("\n3️⃣ TESTING CHART GENERATION")
+    # Step 4: Setup Kaleido Chrome
+    print("\n3️⃣ SETTING UP CHART GENERATION")
     print("-" * 30)
+    if not setup_kaleido_chrome():
+        print("⚠️  Chrome installation for Kaleido failed - continuing anyway...")
+        print("   Charts may not be available in PDF reports")
+    
+    # Step 5: Test Kaleido (non-blocking)
     test_kaleido()  # This doesn't affect success since we have lazy initialization
     
-    # Step 5: Test application imports
-    print("\n4️⃣ TESTING APPLICATION")
+    # Step 6: Test application imports
+    print("\n5️⃣ TESTING APPLICATION")
     print("-" * 30)
     try:
         print("🔄 Testing application imports...")
