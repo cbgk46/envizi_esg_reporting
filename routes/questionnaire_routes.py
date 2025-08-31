@@ -195,10 +195,15 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
     html_content = None
     spider_chart_base64 = None
     sustainability_scores = None
+    general_information = None
     session_id = request.cookies.get("session_id")
     
     if session_id and session_id in langflow_results:
         langflow_result = langflow_results[session_id]
+        
+        # Extract general information if available in langflow result
+        if langflow_result and "general_information" in langflow_result:
+            general_information = langflow_result["general_information"]
         
         # Extract markdown content if available
         if langflow_result and langflow_result.get("success") and "extracted_text" in langflow_result:
@@ -231,14 +236,29 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
                     # Fallback to OpenAI extraction if needed
                     sustainability_scores = extract_sustainability_scores(processed_content)
                     if not spider_chart_base64:
-                        spider_chart_base64 = create_spider_chart(sustainability_scores, USERS[current_user]['company'])
+                        # Use company name from general info if available, otherwise fallback to user config
+                        company_name = general_information.get("company") if general_information else USERS[current_user]['company']
+                        spider_chart_base64 = create_spider_chart(sustainability_scores, company_name)
                 
             except Exception as e:
                 print(f"Error converting markdown to HTML: {e}")
                 html_content = f"<pre>{markdown_content}</pre>"
     
+    # Fallback to user's general info if not in langflow result
+    if not general_information and current_user in USERS and "general_info" in USERS[current_user]:
+        general_information = USERS[current_user]["general_info"]
+    
     if not html_content:
-        raise HTTPException(status_code=404, detail="No report data available")
+        raise HTTPException(status_code=404, detail="No report data available. Please complete the questionnaire first.")
+    
+    if not general_information:
+        raise HTTPException(status_code=404, detail="No company information available. Please complete the questionnaire first.")
+    
+    # Use the company information from the form submission or fallback to user config
+    company_name = general_information.get("company", USERS[current_user]['company'] if current_user in USERS else "Unknown Company")
+    company_industry = general_information.get("industry", USERS[current_user]['industry'] if current_user in USERS and 'industry' in USERS[current_user] else "Unknown Industry")
+    company_location = general_information.get("headquarters", USERS[current_user]['location'] if current_user in USERS and 'location' in USERS[current_user] else "Unknown Location")
+    company_employees = general_information.get("employees", "Unknown")
     
     # Create PDF-friendly HTML
     pdf_html = f"""
@@ -246,7 +266,7 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>Sustainability Report - {USERS[current_user]['company']}</title>
+        <title>Sustainability Report - {company_name}</title>
                  <style>
              @page {{
                  size: A4;
@@ -370,10 +390,24 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
         <div class="header">
             <h1>🌱 Sustainability Maturity Assessment Report</h1>
             <div class="company-info">
-                <strong>{USERS[current_user]['company']}</strong><br>
-                {USERS[current_user]['industry']} | {USERS[current_user]['location']}<br>
-                Revenue: {USERS[current_user]['revenue']}<br>
+                <strong>{company_name}</strong><br>
+                {company_industry} | {company_location}<br>
+                Employees: {company_employees}<br>
                 Generated on: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}
+            </div>
+        </div>
+        
+        <!-- Company Information Section -->
+        <div style="background: rgba(0,0,0,0.05); padding: 20px; margin: 20px 0; border-radius: 10px; page-break-inside: avoid;">
+            <h2 style="color: #4CAF50; margin-bottom: 15px; text-align: center;">🏢 Company Information</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div><strong>Company:</strong> {general_information.get("company", "N/A")}</div>
+                <div><strong>Industry:</strong> {general_information.get("industry", "N/A")}</div>
+                <div><strong>Employees:</strong> {general_information.get("employees", "N/A")}</div>
+                <div><strong>Headquarters:</strong> {general_information.get("headquarters", "N/A")}</div>
+                {f'<div style="grid-column: 1 / -1;"><strong>Products/Services:</strong> {general_information.get("products", "N/A")}</div>' if general_information.get("products") else ''}
+                {f'<div style="grid-column: 1 / -1;"><strong>Manufacturing Location:</strong> {general_information.get("manufacturing_location", "N/A")}</div>' if general_information.get("manufacturing_location") else ''}
+                {f'<div style="grid-column: 1 / -1;"><strong>Company Profile:</strong> {general_information.get("profile", "N/A")}</div>' if general_information.get("profile") else ''}
             </div>
         </div>
         
@@ -423,9 +457,9 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
     """
     
     try:
-        # Create filename
-        company_name = USERS[current_user]['company'].replace(' ', '_').replace(',', '')
-        filename = f"Sustainability_Report_{company_name}_{datetime.now().strftime('%Y%m%d')}.pdf"
+        # Create filename using the actual company name from the form
+        safe_company_name = company_name.replace(' ', '_').replace(',', '').replace('/', '_').replace('\\', '_')
+        filename = f"Sustainability_Report_{safe_company_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
         
         # Generate PDF using playwright
         async with async_playwright() as p:
@@ -459,7 +493,9 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
         
     except Exception as e:
         print(f"Error generating PDF: {e}")
-        raise HTTPException(status_code=500, detail="Failed to generate PDF")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to generate PDF: {str(e)}")
 
 @router.get("/success", response_class=HTMLResponse)
 async def success_page(request: Request, current_user: str = Depends(require_login)):

@@ -9,3 +9,6 @@ python-dotenv
 matplotlib
 plotly
 kaleido
+tavily-python
+
+

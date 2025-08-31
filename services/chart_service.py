@@ -3,8 +3,31 @@ import plotly.io as pio
 import base64
 from models import SpiderChartModel
 
+def _ensure_kaleido_initialized():
+    """Initialize Kaleido Chrome if not already done"""
+    try:
+        import kaleido
+        # Check if kaleido is already initialized by trying a simple operation
+        try:
+            # This will fail if kaleido is not initialized
+            pio.to_image(go.Figure(), format="png", width=100, height=100)
+        except Exception:
+            # If it fails, initialize kaleido
+            print("Initializing Kaleido Chrome for chart generation...")
+            kaleido.get_chrome_sync()
+            print("Kaleido Chrome initialized successfully")
+        return True
+    except Exception as e:
+        print(f"Warning: Kaleido initialization failed: {e}")
+        return False
+
 def create_spider_chart(scores: SpiderChartModel, company_name: str) -> str:
     """Create a spider chart from sustainability scores and return as base64 image"""
+    
+    # Initialize Kaleido if needed
+    if not _ensure_kaleido_initialized():
+        # If Kaleido fails, return a placeholder or raise an error
+        raise RuntimeError("Chart generation is currently unavailable. Kaleido initialization failed.")
     
     # Define the dimensions and their display names
     dimensions = [

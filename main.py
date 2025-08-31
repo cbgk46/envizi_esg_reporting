@@ -1,10 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-# Initialize Kaleido Chrome for chart generation
-import kaleido
-kaleido.get_chrome_sync()
-
 from routes.auth_routes import router as auth_router
 from routes.questionnaire_routes import router as questionnaire_router
 
@@ -13,7 +9,6 @@ app = FastAPI(
     description="A FastAPI application with login and questionnaire functionality",
     version="1.0.0"
 )
-
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
