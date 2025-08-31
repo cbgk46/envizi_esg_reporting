@@ -7,6 +7,7 @@ Handles initialization of Kaleido and Playwright for remote server deployment
 import subprocess
 import sys
 import os
+import plotly.io as pio
 
 def run_command(command, description):
     """Run a command and handle errors"""
@@ -65,6 +66,8 @@ def main():
         # In development/staging, install all browsers
         if not setup_playwright():
             success = False
+
+    pio.get_chrome()
     
     print("=" * 60)
     
