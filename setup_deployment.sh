@@ -11,6 +11,9 @@ if [ ! -f "main.py" ] || [ ! -f "requirements.txt" ]; then
     exit 1
 fi
 
+echo "📦 Installing Google Chrome..."
+sudo apt-get install google-chrome-stable
+
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt || {
@@ -20,9 +23,24 @@ pip install -r requirements.txt || {
 
 # Install Chrome for Kaleido chart generation
 echo "📊 Installing Chrome for Kaleido chart generation..."
-plotly_get_chrome || {
-    echo "⚠️  Failed to install Chrome for Kaleido - charts may not work in PDF reports"
-    echo "   You can try installing manually or running again"
+kaleido_get_chrome || {
+    echo "⚠️  Failed with kaleido_get_chrome, trying plotly_get_chrome..."
+    plotly_get_chrome || {
+        echo "⚠️  Both methods failed, trying Python fallback..."
+        python -c "
+try:
+    import kaleido
+    kaleido.get_chrome_sync()
+    print('✅ Chrome installed via Python kaleido.get_chrome_sync()')
+except Exception as e:
+    print(f'❌ All Chrome installation methods failed: {e}')
+    print('📝 Note: Charts may not be available in PDF reports')
+    print('💡 You may need to install Chrome manually:')
+    print('   - Ubuntu/Debian: sudo apt-get install google-chrome-stable')
+    print('   - CentOS/RHEL: sudo yum install google-chrome-stable')
+    print('   - macOS: brew install --cask google-chrome')
+"
+    }
 }
 
 # Test Kaleido chart generation
@@ -31,12 +49,19 @@ python -c "
 import plotly.graph_objects as go
 import plotly.io as pio
 try:
+    # Test if Kaleido can find Chrome
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 5, 6], name='test'))
     img_bytes = pio.to_image(fig, format='png', width=400, height=300)
     print(f'✅ Kaleido test successful: {len(img_bytes)} bytes generated')
+    print('✅ Chrome is properly configured for Kaleido')
 except Exception as e:
-    print(f'⚠️  Kaleido test failed: {e}')
+    if 'Chrome' in str(e) or 'chromium' in str(e).lower():
+        print(f'❌ Chrome not found for Kaleido: {e}')
+        print('💡 Try running: kaleido_get_chrome')
+        print('💡 Or manually install Chrome for your system')
+    else:
+        print(f'⚠️  Kaleido test failed: {e}')
     print('📝 Note: Charts may not be available in PDF reports')
 "
 
