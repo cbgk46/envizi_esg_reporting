@@ -9,9 +9,9 @@ from playwright.async_api import async_playwright
 
 from auth import require_login
 from config import USERS, QUESTIONS_DATA, DEBUG_MODE, DEBUG_DEFAULT_SCORE
-from services.questionnaire_processor import process_questionnaire_responses
+from services.questionnaire_processor_no_kaleido import process_questionnaire_responses
 from services.openai_service import extract_sustainability_scores
-from services.chart_service import create_spider_chart
+from services.adaptive_chart_service import create_spider_chart
 
 # Get logger for questionnaire routes
 logger = logging.getLogger("envizi_esg_app.questionnaire_routes")
@@ -118,8 +118,10 @@ async def submit_questionnaire(
         company_name = general_info["company"]  # Use the form company name instead of config
         logger.info(f"Processing questionnaire responses for company: {company_name}")
         
-        processed_result = process_questionnaire_responses(current_user, responses, company_name)
+        # Use matplotlib as the preferred chart method with automatic fallbacks
+        processed_result = process_questionnaire_responses(current_user, responses, company_name, chart_type="matplotlib")
         logger.info(f"Questionnaire processing completed. Success: {processed_result.get('success', False)}")
+        logger.info(f"Chart method used: {processed_result.get('chart_type', 'unknown')}")
         
         # Add general information to the processed result
         processed_result["general_information"] = general_info
