@@ -18,6 +18,14 @@ pip install -r requirements.txt || {
     exit 1
 }
 
+# Install Playwright system dependencies first
+echo "🔧 Installing Playwright system dependencies..."
+playwright install-deps || {
+    echo "⚠️  Failed to install system dependencies - you may need to run this with sudo:"
+    echo "   sudo playwright install-deps"
+    echo "   or manually install system dependencies for your OS"
+}
+
 # Install Playwright browsers
 echo "🌐 Installing Playwright browsers..."
 if [ "$ENVIRONMENT" = "production" ] || [ "$ENVIRONMENT" = "PRODUCTION" ]; then

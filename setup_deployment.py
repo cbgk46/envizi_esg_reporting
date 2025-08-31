@@ -59,6 +59,10 @@ def test_kaleido():
         # Don't fail the setup for Kaleido issues since we have lazy initialization
         return True
 
+def setup_playwright_deps():
+    """Install Playwright system dependencies"""
+    return run_command("playwright install-deps", "Installing Playwright system dependencies")
+
 def setup_playwright():
     """Install Playwright browsers"""
     return run_command("playwright install", "Installing Playwright browsers")
@@ -140,6 +144,14 @@ def main():
     # Step 2: Setup Playwright
     print("\n2️⃣ SETTING UP PLAYWRIGHT")
     print("-" * 30)
+    
+    # First, install system dependencies
+    if not setup_playwright_deps():
+        print("⚠️  System dependencies installation failed - continuing anyway...")
+        print("   You may need to run manually with sudo:")
+        print("   sudo playwright install-deps")
+    
+    # Then install browsers
     if is_production:
         # In production, only install Chromium to save space and time
         if not setup_playwright_chromium_only():
