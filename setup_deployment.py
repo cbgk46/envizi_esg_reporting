@@ -7,7 +7,8 @@ Handles initialization of Kaleido and Playwright for remote server deployment
 import subprocess
 import sys
 import os
-import plotly.io as pio
+import kaleido
+
 
 def run_command(command, description):
     """Run a command and handle errors"""
@@ -50,7 +51,7 @@ def main():
     
     # Check if running in production environment
     is_production = os.getenv('ENVIRONMENT', '').lower() == 'production'
-    
+    setup_kaleido()
     success = True
     
     # Setup Kaleido

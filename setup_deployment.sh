@@ -54,3 +54,5 @@ echo "🔧 Environment variables you can set:"
 echo "   - ENVIRONMENT=production (for production optimizations)" 
 
 python main.py
+
+#https://enviziesgreporting-production.up.railway.app/
