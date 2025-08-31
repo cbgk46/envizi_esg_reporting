@@ -67,8 +67,6 @@ def main():
         # In development/staging, install all browsers
         if not setup_playwright():
             success = False
-
-    pio.get_chrome()
     
     print("=" * 60)
     
