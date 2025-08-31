@@ -547,14 +547,54 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
                 import os
                 playwright_cache = os.path.expanduser("~/.cache/ms-playwright")
                 
-                # Look for headless shell executable
+                # Look for any Chromium executable with multiple fallback paths
                 headless_shell_path = None
                 if os.path.isdir(playwright_cache):
+                    # Try multiple possible structures and executable names
+                    possible_paths = []
+                    
                     for item in os.listdir(playwright_cache):
-                        if item.startswith('chromium_headless_shell'):
-                            potential_path = os.path.join(playwright_cache, item, 'chrome-linux', 'headless_shell')
-                            if os.path.isfile(potential_path):
-                                headless_shell_path = potential_path
+                        if item.startswith('chromium'):
+                            base_path = os.path.join(playwright_cache, item)
+                            
+                            # Common executable locations and names
+                            possible_executables = [
+                                # Headless Shell paths
+                                'chrome-linux/headless_shell',
+                                'chrome-linux/chrome',
+                                'headless_shell',
+                                'chrome',
+                                # Regular Chromium paths
+                                'chrome-linux/chromium',
+                                'chrome-linux/chrome-wrapper',
+                                'chromium-linux/chromium',
+                                'chromium',
+                                # Other possible paths
+                                'bin/chromium',
+                                'bin/chrome'
+                            ]
+                            
+                            for exec_path in possible_executables:
+                                full_path = os.path.join(base_path, exec_path)
+                                if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                                    possible_paths.append(full_path)
+                    
+                    # Use the first working executable found
+                    if possible_paths:
+                        headless_shell_path = possible_paths[0]
+                        print(f"Found executable: {headless_shell_path}")
+                    else:
+                        # If no executables found in expected locations, search recursively
+                        print("No executables in standard locations, searching recursively...")
+                        for root, dirs, files in os.walk(playwright_cache):
+                            for file in files:
+                                if file in ['headless_shell', 'chrome', 'chromium', 'chromium-browser']:
+                                    file_path = os.path.join(root, file)
+                                    if os.access(file_path, os.X_OK):
+                                        headless_shell_path = file_path
+                                        print(f"Found executable via recursive search: {headless_shell_path}")
+                                        break
+                            if headless_shell_path:
                                 break
                 
                 if headless_shell_path:
