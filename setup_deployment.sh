@@ -1,58 +1,46 @@
 #!/bin/bash
 
-# Deployment setup script for ESG Reporting Application
-# Handles installation of dependencies and browser setup
-
+# Simple deployment setup script for ESG Reporting Application
 set -e  # Exit on any error
 
-echo "🚀 Starting deployment setup for ESG Reporting Application..."
-echo "============================================================"
+echo "🚀 Setting up ESG Reporting Application..."
 
-# Function to print status messages
-print_status() {
-    echo "🔄 $1..."
-}
-
-print_success() {
-    echo "✅ $1 completed successfully"
-}
-
-print_error() {
-    echo "❌ $1 failed"
-}
-
-# Install Python dependencies
-print_status "Installing Python dependencies"
-pip install -r requirements.txt
-print_success "Python dependencies installation"
-
-# Install Playwright browsers
-print_status "Installing Playwright browsers"
-if [ "${ENVIRONMENT,,}" = "production" ]; then
-    # In production, only install Chromium to save space and time
-    playwright install chromium
-    print_success "Playwright Chromium browser installation"
-else
-    # In development/staging, install all browsers
-    playwright install
-    print_success "Playwright browsers installation"
+# Check if we're in the right directory
+if [ ! -f "main.py" ] || [ ! -f "requirements.txt" ]; then
+    echo "❌ Error: Run this script from the envizi_esg_reporting directory"
+    exit 1
 fi
 
-# Run Python setup for Kaleido
-print_status "Running Python setup (Kaleido initialization)"
-python setup_deployment.py
-print_success "Python setup"
+# Install Python dependencies
+echo "📦 Installing Python dependencies..."
+pip install -r requirements.txt || {
+    echo "❌ Failed to install dependencies. Try: pip install --upgrade pip"
+    exit 1
+}
 
-echo "============================================================"
-echo "🎉 Deployment setup completed successfully!"
+# Install Playwright browsers
+echo "🌐 Installing Playwright browsers..."
+if [ "$ENVIRONMENT" = "production" ] || [ "$ENVIRONMENT" = "PRODUCTION" ]; then
+    playwright install chromium || {
+        echo "❌ Failed to install Chromium"
+        exit 1
+    }
+else
+    playwright install || {
+        echo "❌ Failed to install browsers"
+        exit 1
+    }
+fi
+
+# Run deployment setup
+echo "🔧 Running deployment setup..."
+python setup_deployment.py || {
+    echo "❌ Setup failed. Run 'python deployment_debug.py' for diagnostics"
+    exit 1
+}
+
 echo ""
-echo "📋 Next steps:"
-echo "   1. Start your application: python main.py"
-echo "   2. Or use uvicorn: uvicorn main:app --host 0.0.0.0 --port 8000"
+echo "✅ Setup complete! Start the application with:"
+echo "   python main.py"
 echo ""
-echo "🔧 Environment variables you can set:"
-echo "   - ENVIRONMENT=production (for production optimizations)" 
-
-python main.py
-
-#https://enviziesgreporting-production.up.railway.app/
+echo "🌍 App will be available at: http://localhost:8000"
