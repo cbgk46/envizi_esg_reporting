@@ -144,13 +144,37 @@ fi
 
 # Verify Playwright installation
 echo "🔍 Verifying Playwright browser installation..."
-if ! playwright list | grep -i "chromium"; then
-    echo "❌ CRITICAL: Chromium browser not found after installation!"
-    echo "   Available browsers:"
-    playwright list || echo "   Failed to list browsers"
-    exit 1
-else
+# Check if Chromium browser files exist in the Playwright cache
+PLAYWRIGHT_CACHE_DIR="${HOME}/.cache/ms-playwright"
+if [ -d "$PLAYWRIGHT_CACHE_DIR" ] && (ls "$PLAYWRIGHT_CACHE_DIR"/chromium* >/dev/null 2>&1 || ls "$PLAYWRIGHT_CACHE_DIR"/chromium_headless_shell* >/dev/null 2>&1); then
     echo "✅ Chromium browser successfully installed"
+    echo "   Found in: $PLAYWRIGHT_CACHE_DIR"
+    ls "$PLAYWRIGHT_CACHE_DIR"/chromium* 2>/dev/null || ls "$PLAYWRIGHT_CACHE_DIR"/chromium_headless_shell* 2>/dev/null | head -3
+else
+    echo "❌ CRITICAL: Chromium browser not found after installation!"
+    echo "   Expected location: $PLAYWRIGHT_CACHE_DIR"
+    echo "   Available browsers/files:"
+    ls "$PLAYWRIGHT_CACHE_DIR" 2>/dev/null || echo "   Cache directory not found"
+    
+    # Try alternative verification using Python
+    echo "🐍 Trying Python-based verification..."
+    python -c "
+import sys
+try:
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        browser.close()
+        print('✅ Chromium browser verification successful via Python')
+        sys.exit(0)
+except Exception as e:
+    print(f'❌ Python verification failed: {e}')
+    sys.exit(1)
+    " || {
+        echo "❌ CRITICAL: Both file-based and Python verification failed!"
+        echo "   PDF generation will not work without browser installation."
+        exit 1
+    }
 fi
 
 # Run deployment setup
