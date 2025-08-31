@@ -25,6 +25,21 @@ plotly_get_chrome || {
     echo "   You can try installing manually or running again"
 }
 
+# Test Kaleido chart generation
+echo "🧪 Testing Kaleido chart generation..."
+python -c "
+import plotly.graph_objects as go
+import plotly.io as pio
+try:
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 5, 6], name='test'))
+    img_bytes = pio.to_image(fig, format='png', width=400, height=300)
+    print(f'✅ Kaleido test successful: {len(img_bytes)} bytes generated')
+except Exception as e:
+    print(f'⚠️  Kaleido test failed: {e}')
+    print('📝 Note: Charts may not be available in PDF reports')
+"
+
 # Install Playwright system dependencies first
 echo "🔧 Installing Playwright system dependencies..."
 playwright install-deps || {

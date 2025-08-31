@@ -34,47 +34,7 @@ def run_command(command, description):
         logger.error(f"Command failed: {command} - {e.stderr.strip()}")
         return False
 
-def setup_kaleido_chrome():
-    """Install Chrome for Kaleido chart generation"""
-    return run_command("plotly_get_chrome", "Installing Chrome for Kaleido chart generation")
 
-def test_kaleido():
-    """Test Kaleido installation and chart generation capability"""
-    print("🔄 Testing Kaleido chart generation...")
-    try:
-        # Test basic chart generation without triggering Chrome download
-        import plotly.graph_objects as go
-        import plotly.io as pio
-        
-        # Create a simple test figure
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 5, 6], name="test"))
-        
-        # Test image generation (this will trigger Kaleido initialization if needed)
-        img_bytes = pio.to_image(fig, format="png", width=400, height=300)
-        
-        print(f"✅ Kaleido chart generation test successful: {len(img_bytes)} bytes generated")
-        logger.info(f"Kaleido test successful: {len(img_bytes)} bytes generated")
-        return True
-    except Exception as e:
-        print(f"⚠️  Kaleido test failed: {e}")
-        if "Chrome" in str(e) or "kaleido" in str(e).lower():
-            print("   🔧 Attempting to install Chrome for Kaleido...")
-            if setup_kaleido_chrome():
-                print("   ✅ Chrome installed, retrying Kaleido test...")
-                try:
-                    img_bytes = pio.to_image(fig, format="png", width=400, height=300)
-                    print(f"✅ Kaleido chart generation now working: {len(img_bytes)} bytes generated")
-                    return True
-                except Exception as retry_e:
-                    print(f"   ❌ Kaleido still failing after Chrome install: {retry_e}")
-            else:
-                print("   ❌ Failed to install Chrome for Kaleido")
-        
-        print("   📝 Note: Charts may not be available in PDF reports")
-        logger.warning(f"Kaleido test failed: {e}")
-        # Don't fail the setup for Kaleido issues since we have lazy initialization
-        return True
 
 def setup_playwright_deps():
     """Install Playwright system dependencies"""
@@ -116,7 +76,7 @@ def check_dependencies():
     print("🔄 Checking Python dependencies...")
     required_packages = [
         'fastapi', 'uvicorn', 'jinja2', 'playwright', 
-        'plotly', 'kaleido', 'openai', 'markdown'
+        'plotly', 'openai', 'markdown'
     ]
     
     missing_packages = []
@@ -183,18 +143,8 @@ def main():
         if not test_playwright():
             success = False
     
-    # Step 4: Setup Kaleido Chrome
-    print("\n3️⃣ SETTING UP CHART GENERATION")
-    print("-" * 30)
-    if not setup_kaleido_chrome():
-        print("⚠️  Chrome installation for Kaleido failed - continuing anyway...")
-        print("   Charts may not be available in PDF reports")
-    
-    # Step 5: Test Kaleido (non-blocking)
-    test_kaleido()  # This doesn't affect success since we have lazy initialization
-    
-    # Step 6: Test application imports
-    print("\n5️⃣ TESTING APPLICATION")
+    # Step 4: Test application imports
+    print("\n3️⃣ TESTING APPLICATION")
     print("-" * 30)
     try:
         print("🔄 Testing application imports...")
