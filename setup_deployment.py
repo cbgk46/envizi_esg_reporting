@@ -119,18 +119,56 @@ def verify_playwright_installation():
             return False
 
 def test_playwright():
-    """Test Playwright PDF generation capability"""
+    """Test Playwright PDF generation capability with automatic browser detection"""
     print("🔄 Testing Playwright PDF generation...")
     try:
         async def test_pdf():
             from playwright.async_api import async_playwright
             async with async_playwright() as p:
-                browser = await p.chromium.launch()
-                page = await browser.new_page()
-                await page.set_content("<h1>Test PDF</h1><p>Playwright is working!</p>")
-                pdf_bytes = await page.pdf(format='A4')
-                await browser.close()
-                return len(pdf_bytes)
+                browser = None
+                try:
+                    # Method 1: Try standard Chromium launch
+                    browser = await p.chromium.launch(headless=True)
+                    page = await browser.new_page()
+                    await page.set_content("<h1>Test PDF</h1><p>Playwright is working!</p>")
+                    pdf_bytes = await page.pdf(format='A4')
+                    await browser.close()
+                    return len(pdf_bytes)
+                    
+                except Exception as e:
+                    # Method 2: Try with Chromium Headless Shell
+                    if browser:
+                        await browser.close()
+                    
+                    print(f"   Standard launch failed: {e}")
+                    print("   Trying Chromium Headless Shell...")
+                    
+                    import os
+                    playwright_cache = os.path.expanduser("~/.cache/ms-playwright")
+                    
+                    # Look for headless shell executable
+                    headless_shell_path = None
+                    if os.path.isdir(playwright_cache):
+                        for item in os.listdir(playwright_cache):
+                            if item.startswith('chromium_headless_shell'):
+                                potential_path = os.path.join(playwright_cache, item, 'chrome-linux', 'headless_shell')
+                                if os.path.isfile(potential_path):
+                                    headless_shell_path = potential_path
+                                    break
+                    
+                    if headless_shell_path:
+                        browser = await p.chromium.launch(
+                            headless=True,
+                            executable_path=headless_shell_path
+                        )
+                        page = await browser.new_page()
+                        await page.set_content("<h1>Test PDF</h1><p>Playwright with Headless Shell is working!</p>")
+                        pdf_bytes = await page.pdf(format='A4')
+                        await browser.close()
+                        print(f"   ✅ Headless Shell test successful")
+                        return len(pdf_bytes)
+                    else:
+                        raise Exception(f"Both standard Chromium and Headless Shell failed. Original error: {e}")
         
         pdf_size = asyncio.run(test_pdf())
         print(f"✅ Playwright PDF generation test successful: {pdf_size} bytes generated")
@@ -139,6 +177,7 @@ def test_playwright():
     except Exception as e:
         print(f"❌ Playwright test failed: {e}")
         logger.error(f"Playwright test failed: {e}")
+        print("💡 Try installing regular Chromium: playwright install chromium")
         return False
 
 def check_dependencies():

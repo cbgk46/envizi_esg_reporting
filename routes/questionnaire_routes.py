@@ -507,28 +507,92 @@ async def download_pdf(request: Request, current_user: str = Depends(require_log
         safe_company_name = company_name.replace(' ', '_').replace(',', '').replace('/', '_').replace('\\', '_')
         filename = f"Sustainability_Report_{safe_company_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
         
-        # Generate PDF using playwright
+        # Generate PDF using playwright with automatic browser detection
         async with async_playwright() as p:
-            browser = await p.chromium.launch()
-            page = await browser.new_page()
+            # Try to launch browser with automatic fallback for different Chromium types
+            browser = None
+            pdf_bytes = None
             
-            # Set content and generate PDF
-            await page.set_content(pdf_html)
-            pdf_bytes = await page.pdf(
-                format='A4',
-                margin={
-                    'top': '2cm',
-                    'right': '2cm',
-                    'bottom': '2cm',
-                    'left': '2cm'
-                },
-                print_background=True,
-                display_header_footer=True,
-                header_template='<div style="font-size:10px; text-align:center; width:100%;">Sustainability Maturity Assessment Report</div>',
-                footer_template='<div style="font-size:10px; text-align:center; width:100%;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>'
-            )
+            try:
+                # Method 1: Try standard Chromium launch
+                browser = await p.chromium.launch(headless=True)
+                page = await browser.new_page()
+                
+                # Set content and generate PDF
+                await page.set_content(pdf_html)
+                pdf_bytes = await page.pdf(
+                    format='A4',
+                    margin={
+                        'top': '2cm',
+                        'right': '2cm',
+                        'bottom': '2cm',
+                        'left': '2cm'
+                    },
+                    print_background=True,
+                    display_header_footer=True,
+                    header_template='<div style="font-size:10px; text-align:center; width:100%;">Sustainability Maturity Assessment Report</div>',
+                    footer_template='<div style="font-size:10px; text-align:center; width:100%;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>'
+                )
+                
+                await browser.close()
+                
+            except Exception as e:
+                # Method 2: Try with custom executable path for Chromium Headless Shell
+                if browser:
+                    await browser.close()
+                
+                print(f"Standard launch failed: {e}")
+                print("Attempting to launch with Chromium Headless Shell configuration...")
+                
+                import os
+                playwright_cache = os.path.expanduser("~/.cache/ms-playwright")
+                
+                # Look for headless shell executable
+                headless_shell_path = None
+                if os.path.isdir(playwright_cache):
+                    for item in os.listdir(playwright_cache):
+                        if item.startswith('chromium_headless_shell'):
+                            potential_path = os.path.join(playwright_cache, item, 'chrome-linux', 'headless_shell')
+                            if os.path.isfile(potential_path):
+                                headless_shell_path = potential_path
+                                break
+                
+                if headless_shell_path:
+                    try:
+                        browser = await p.chromium.launch(
+                            headless=True,
+                            executable_path=headless_shell_path
+                        )
+                        page = await browser.new_page()
+                        
+                        # Set content and generate PDF
+                        await page.set_content(pdf_html)
+                        pdf_bytes = await page.pdf(
+                            format='A4',
+                            margin={
+                                'top': '2cm',
+                                'right': '2cm',
+                                'bottom': '2cm',
+                                'left': '2cm'
+                            },
+                            print_background=True,
+                            display_header_footer=True,
+                            header_template='<div style="font-size:10px; text-align:center; width:100%;">Sustainability Maturity Assessment Report</div>',
+                            footer_template='<div style="font-size:10px; text-align:center; width:100%;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>'
+                        )
+                        
+                        await browser.close()
+                        print("✅ PDF generated successfully using Chromium Headless Shell")
+                        
+                    except Exception as headless_error:
+                        if browser:
+                            await browser.close()
+                        raise Exception(f"Both standard Chromium and Headless Shell launch failed. Standard: {e}, Headless: {headless_error}")
+                else:
+                    raise Exception(f"Standard Chromium launch failed and no Headless Shell found. Error: {e}")
             
-            await browser.close()
+            if not pdf_bytes:
+                raise Exception("Failed to generate PDF - no bytes returned")
         
         # Return PDF as download
         return Response(
