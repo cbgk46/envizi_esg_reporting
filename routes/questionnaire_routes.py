@@ -1,3 +1,5 @@
+import logging
+import traceback
 from fastapi import APIRouter, Request, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
@@ -11,27 +13,48 @@ from services.questionnaire_processor import process_questionnaire_responses
 from services.openai_service import extract_sustainability_scores
 from services.chart_service import create_spider_chart
 
+# Get logger for questionnaire routes
+logger = logging.getLogger("envizi_esg_app.questionnaire_routes")
+
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 # Global variable to store langflow results (in production, use a proper database)
 langflow_results = {}
 
+logger.info("Questionnaire routes module initialized")
+logger.info(f"Templates directory: templates")
+logger.info(f"Total questions available: {len(QUESTIONS_DATA.get('questionnaireReference', []))}")
+
 @router.get("/questionnaire", response_class=HTMLResponse)
 async def questionnaire_page(request: Request, current_user: str = Depends(require_login)):
     """Questionnaire page (requires login)"""
     
-    context = {
-        "request": request,
-        "user_name": USERS[current_user]['name'],
-        "total_questions": len(QUESTIONS_DATA['questionnaireReference']),
-        "questions": QUESTIONS_DATA['questionnaireReference'],
-        "responses": QUESTIONS_DATA['responses'],
-        "debug_mode": DEBUG_MODE,
-        "debug_default_score": DEBUG_DEFAULT_SCORE
-    }
+    logger.info(f"Questionnaire page accessed by user: {current_user}")
     
-    return templates.TemplateResponse("questionnaire.html", context)
+    try:
+        user_info = USERS.get(current_user, {})
+        logger.debug(f"User info loaded for {current_user}: {list(user_info.keys())}")
+        
+        context = {
+            "request": request,
+            "user_name": user_info.get('name', current_user),
+            "total_questions": len(QUESTIONS_DATA['questionnaireReference']),
+            "questions": QUESTIONS_DATA['questionnaireReference'],
+            "responses": QUESTIONS_DATA['responses'],
+            "debug_mode": DEBUG_MODE,
+            "debug_default_score": DEBUG_DEFAULT_SCORE
+        }
+        
+        logger.debug(f"Context prepared with {context['total_questions']} questions")
+        logger.info(f"Rendering questionnaire page for user: {current_user}")
+        
+        return templates.TemplateResponse("questionnaire.html", context)
+        
+    except Exception as e:
+        logger.error(f"Error loading questionnaire page for user {current_user}: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail="Failed to load questionnaire page")
 
 @router.post("/submit-questionnaire")
 async def submit_questionnaire(
@@ -40,73 +63,94 @@ async def submit_questionnaire(
 ):
     """Handle questionnaire submission"""
     
-    # Get form data
-    form_data = await request.form()
+    logger.info(f"Questionnaire submission started by user: {current_user}")
     
-    # Extract general information fields
-    general_info = {
-        "company": form_data.get("company", "").strip(),
-        "name": form_data.get("name", "").strip(),
-        "email": form_data.get("email", "").strip(),
-        "industry": form_data.get("industry", "").strip(),
-        "employees": form_data.get("employees", "").strip(),
-        "headquarters": form_data.get("headquarters", "").strip(),
-        "products": form_data.get("products", "").strip(),
-        "manufacturing_location": form_data.get("manufacturing_location", "").strip(),
-        "profile": form_data.get("profile", "").strip()
-    }
-    
-    # Validate required general information fields
-    required_fields = ["company", "name", "email", "industry", "employees", "headquarters"]
-    missing_fields = [field for field in required_fields if not general_info[field]]
-    
-    if missing_fields:
-        # In a real application, you'd handle this error more gracefully
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Missing required fields: {', '.join(missing_fields)}"
-        )
-    
-    # Process sustainability questionnaire responses
-    responses = {}
-    for question_id in QUESTIONS_DATA["questionnaireReference"]:
-        q_id = question_id["questionId"]
-        if q_id in form_data:
-            responses[q_id] = int(form_data[q_id])
-    
-    # Update user information with general info (for this session)
-    # In a real application, you'd save this to a database
-    if current_user in USERS:
-        USERS[current_user].update({
-            "general_info": general_info,
-            "last_updated": str(datetime.now())
-        })
-    
-    # Process questionnaire using new logic with updated company name
-    company_name = general_info["company"]  # Use the form company name instead of config
-    processed_result = process_questionnaire_responses(current_user, responses, company_name)
-    
-    # Add general information to the processed result
-    processed_result["general_information"] = general_info
-    
-    # Store the result in session for display on success page
-    session_id = request.cookies.get("session_id")
-    if session_id:
-        langflow_results[session_id] = processed_result
-    
-    # In a real application, you would save this to a database
-    response_data = {
-        "user": current_user,
-        "timestamp": str(request.headers.get("date", "")),
-        "general_information": general_info,
-        "total_questions": len(QUESTIONS_DATA["questionnaireReference"]),
-        "answered_questions": len(responses),
-        "responses": responses,
-        "processed_result": processed_result
-    }
-    
-    # Redirect to report page to display the Langflow analysis
-    return RedirectResponse(url="/report", status_code=status.HTTP_302_FOUND)
+    try:
+        # Get form data
+        form_data = await request.form()
+        logger.debug(f"Form data keys received: {list(form_data.keys())}")
+        logger.debug(f"Form data size: {len(form_data)} fields")
+        
+        # Extract general information fields
+        general_info = {
+            "company": form_data.get("company", "").strip(),
+            "name": form_data.get("name", "").strip(),
+            "email": form_data.get("email", "").strip(),
+            "industry": form_data.get("industry", "").strip(),
+            "employees": form_data.get("employees", "").strip(),
+            "headquarters": form_data.get("headquarters", "").strip(),
+            "products": form_data.get("products", "").strip(),
+            "manufacturing_location": form_data.get("manufacturing_location", "").strip(),
+            "profile": form_data.get("profile", "").strip()
+        }
+        
+        # Validate required general information fields
+        required_fields = ["company", "name", "email", "industry", "employees", "headquarters"]
+        missing_fields = [field for field in required_fields if not general_info[field]]
+        
+        logger.debug(f"General info extracted: {list(general_info.keys())}")
+        
+        if missing_fields:
+            logger.warning(f"Missing required fields in questionnaire submission: {missing_fields}")
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Missing required fields: {', '.join(missing_fields)}"
+            )
+        
+        # Process sustainability questionnaire responses
+        responses = {}
+        for question_id in QUESTIONS_DATA["questionnaireReference"]:
+            q_id = question_id["questionId"]
+            if q_id in form_data:
+                responses[q_id] = int(form_data[q_id])
+        
+        logger.info(f"Processed {len(responses)} questionnaire responses out of {len(QUESTIONS_DATA['questionnaireReference'])} total questions")
+        
+        # Update user information with general info (for this session)
+        # In a real application, you'd save this to a database
+        if current_user in USERS:
+            USERS[current_user].update({
+                "general_info": general_info,
+                "last_updated": str(datetime.now())
+            })
+        
+        # Process questionnaire using new logic with updated company name
+        company_name = general_info["company"]  # Use the form company name instead of config
+        logger.info(f"Processing questionnaire responses for company: {company_name}")
+        
+        processed_result = process_questionnaire_responses(current_user, responses, company_name)
+        logger.info(f"Questionnaire processing completed. Success: {processed_result.get('success', False)}")
+        
+        # Add general information to the processed result
+        processed_result["general_information"] = general_info
+        
+        # Store the result in session for display on success page
+        session_id = request.cookies.get("session_id")
+        if session_id:
+            langflow_results[session_id] = processed_result
+        
+        # In a real application, you would save this to a database
+        response_data = {
+            "user": current_user,
+            "timestamp": str(request.headers.get("date", "")),
+            "general_information": general_info,
+            "total_questions": len(QUESTIONS_DATA["questionnaireReference"]),
+            "answered_questions": len(responses),
+            "responses": responses,
+            "processed_result": processed_result
+        }
+        
+        # Redirect to report page to display the Langflow analysis
+        logger.info(f"Questionnaire submission completed successfully for user: {current_user}")
+        return RedirectResponse(url="/report", status_code=status.HTTP_302_FOUND)
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions (like validation errors)
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error during questionnaire submission for user {current_user}: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail="Failed to process questionnaire submission")
 
 @router.get("/report", response_class=HTMLResponse)
 async def report_page(request: Request, current_user: str = Depends(require_login)):
