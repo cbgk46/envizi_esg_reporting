@@ -66,34 +66,57 @@ def setup_playwright_chromium_only():
 def verify_playwright_installation():
     """Verify that Playwright browsers are properly installed"""
     print("🔍 Verifying Playwright browser installation...")
+    
+    # Method 1: Check file system for browser installation
     try:
-        # Check if chromium executable exists
-        result = subprocess.run(
-            ["playwright", "list"],
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
+        import os.path
+        playwright_cache = os.path.expanduser("~/.cache/ms-playwright")
         
-        if result.returncode == 0:
-            browsers = result.stdout.lower()
-            if "chromium" in browsers:
-                print("✅ Chromium browser is installed")
-                return True
+        if os.path.isdir(playwright_cache):
+            # Look for chromium directories (standard and headless shell)
+            chromium_dirs = [d for d in os.listdir(playwright_cache) 
+                           if d.startswith('chromium') and os.path.isdir(os.path.join(playwright_cache, d))]
+            
+            if chromium_dirs:
+                print(f"✅ Chromium browser files found in: {playwright_cache}")
+                print(f"   Installed versions: {', '.join(chromium_dirs)}")
+                
+                # Method 2: Try launching browser to verify it works
+                try:
+                    from playwright.sync_api import sync_playwright
+                    with sync_playwright() as p:
+                        browser = p.chromium.launch(headless=True)
+                        browser.close()
+                        print("✅ Chromium browser launch test successful")
+                        return True
+                except Exception as launch_error:
+                    print(f"⚠️  Browser files found but launch test failed: {launch_error}")
+                    print("   Files exist but browser may not be functional")
+                    return False
             else:
-                print("❌ Chromium browser not found in installed browsers")
-                print(f"Available browsers: {result.stdout.strip()}")
+                print(f"❌ No Chromium browser directories found in {playwright_cache}")
+                print(f"   Available items: {os.listdir(playwright_cache) if os.path.exists(playwright_cache) else 'Directory does not exist'}")
                 return False
         else:
-            print(f"❌ Failed to list browsers: {result.stderr}")
+            print(f"❌ Playwright cache directory not found: {playwright_cache}")
             return False
             
-    except subprocess.TimeoutExpired:
-        print("❌ Timeout while checking browser installation")
-        return False
     except Exception as e:
-        print(f"❌ Error checking browser installation: {e}")
-        return False
+        print(f"❌ Error during browser verification: {e}")
+        logger.error(f"Browser verification error: {e}")
+        
+        # Method 3: Fallback - try direct browser launch
+        try:
+            print("🔄 Trying fallback verification with direct browser launch...")
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                browser.close()
+                print("✅ Fallback verification successful - browser can be launched")
+                return True
+        except Exception as fallback_error:
+            print(f"❌ Fallback verification failed: {fallback_error}")
+            return False
 
 def test_playwright():
     """Test Playwright PDF generation capability"""
@@ -258,8 +281,8 @@ def main():
         print("      sudo playwright install-deps")
         print("   2. Install browsers manually:")
         print("      playwright install chromium")
-        print("   3. Verify installation:")
-        print("      playwright list")
+        print("   3. Verify installation by checking cache:")
+        print("      ls -la ~/.cache/ms-playwright/")
         print("   4. Test browser launch:")
         print("      python -c \"from playwright.sync_api import sync_playwright; p = sync_playwright().start(); browser = p.chromium.launch(); browser.close(); p.stop()\"")
         print("   5. Clear browser cache and reinstall:")
