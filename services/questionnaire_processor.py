@@ -288,7 +288,7 @@ def generate_sustainability_report(user_scores: Dict[str, float], company_name: 
     
     return "\n".join(report_sections)
 
-def process_questionnaire_responses(current_user: str, responses: Dict[str, int], company_name: str) -> Dict:
+def process_questionnaire_responses(current_user: str, responses: Dict[str, int], company_name: str, industry: str = None) -> Dict:
     """Main function to process questionnaire responses and generate complete analysis"""
     
     # Step 1: Calculate dimension averages
@@ -301,7 +301,8 @@ def process_questionnaire_responses(current_user: str, responses: Dict[str, int]
     spider_chart_model = create_spider_chart_model(dimension_averages)
     
     # Step 4: Generate comprehensive report
-    user_industry = USERS.get(current_user, {}).get('industry', None)
+    # Use provided industry or fallback to user config
+    user_industry = industry if industry else USERS.get(current_user, {}).get('industry', None)
     sustainability_report = generate_sustainability_report(dimension_averages, company_name, user_industry)
     
     # Step 5: Prepare result structure similar to langflow result

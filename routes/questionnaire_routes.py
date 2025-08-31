@@ -114,12 +114,13 @@ async def submit_questionnaire(
                 "last_updated": str(datetime.now())
             })
         
-        # Process questionnaire using new logic with updated company name
+        # Process questionnaire using new logic with updated company name and industry
         company_name = general_info["company"]  # Use the form company name instead of config
-        logger.info(f"Processing questionnaire responses for company: {company_name}")
+        company_industry = general_info["industry"]  # Use the form industry instead of hardcoded config
+        logger.info(f"Processing questionnaire responses for company: {company_name} in industry: {company_industry}")
         
         # Use matplotlib as the preferred chart method with automatic fallbacks
-        processed_result = process_questionnaire_responses(current_user, responses, company_name, chart_type="matplotlib")
+        processed_result = process_questionnaire_responses(current_user, responses, company_name, chart_type="matplotlib", industry=company_industry)
         logger.info(f"Questionnaire processing completed. Success: {processed_result.get('success', False)}")
         logger.info(f"Chart method used: {processed_result.get('chart_type', 'unknown')}")
         
