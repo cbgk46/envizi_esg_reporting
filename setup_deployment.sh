@@ -52,3 +52,5 @@ echo "   2. Or use uvicorn: uvicorn main:app --host 0.0.0.0 --port 8000"
 echo ""
 echo "🔧 Environment variables you can set:"
 echo "   - ENVIRONMENT=production (for production optimizations)" 
+
+python main.py
