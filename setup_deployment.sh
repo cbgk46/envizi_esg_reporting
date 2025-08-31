@@ -12,13 +12,28 @@ if [ ! -f "main.py" ] || [ ! -f "requirements.txt" ]; then
 fi
 
 echo "📦 Installing Google Chrome..."
-# Add Google's signing key and repository
-wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - || {
-    echo "⚠️  Failed to add Google signing key"
-}
-echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list || {
+# Modern way to add Google's signing key and repository
+if command -v curl >/dev/null 2>&1; then
+    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg || {
+        echo "⚠️  Failed to add Google signing key"
+    }
+elif command -v wget >/dev/null 2>&1; then
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg || {
+        echo "⚠️  Failed to add Google signing key"
+    }
+else
+    echo "⚠️  Neither curl nor wget found, installing curl first..."
+    sudo apt-get update && sudo apt-get install -y curl
+    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg || {
+        echo "⚠️  Failed to add Google signing key"
+    }
+fi
+
+# Add repository with proper keyring reference
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list || {
     echo "⚠️  Failed to add Google Chrome repository"
 }
+
 # Update package list and install Chrome
 sudo apt-get update && sudo apt-get install -y google-chrome-stable || {
     echo "⚠️  Failed to install Google Chrome via apt"
