@@ -12,7 +12,18 @@ if [ ! -f "main.py" ] || [ ! -f "requirements.txt" ]; then
 fi
 
 echo "📦 Installing Google Chrome..."
-sudo apt-get install google-chrome-stable
+# Add Google's signing key and repository
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - || {
+    echo "⚠️  Failed to add Google signing key"
+}
+echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list || {
+    echo "⚠️  Failed to add Google Chrome repository"
+}
+# Update package list and install Chrome
+sudo apt-get update && sudo apt-get install -y google-chrome-stable || {
+    echo "⚠️  Failed to install Google Chrome via apt"
+    echo "   Continuing without system Chrome installation..."
+}
 
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
